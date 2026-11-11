@@ -1,0 +1,9 @@
+{
+  "name": "squeegee",
+  "version": "0.1.0",
+  "description": "Cleans AI-looking UI that already exists: audits it against measured evidence, shows three directions on the real page, fixes it at the theme source, keeps everything working.",
+  "author": {
+    "name": "cablemp5",
+    "url": "https://github.com/cablemp5"
+  }
+}

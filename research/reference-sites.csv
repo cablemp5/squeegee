@@ -1,0 +1,566 @@
+surface,category,name,url
+desktop,app,1Password,https://1password.com
+desktop,app,ableton.com,https://ableton.com
+desktop,app,affinity.serif.com,https://affinity.serif.com
+desktop,app,alacritty.org,https://alacritty.org
+desktop,app,alfredapp.com,https://alfredapp.com
+desktop,app,Arc,https://arc.net
+desktop,app,beekeeperstudio.io,https://beekeeperstudio.io
+desktop,app,blackmagicdesign.com,https://blackmagicdesign.com
+desktop,app,brave.com,https://brave.com
+desktop,app,CleanShot X,https://cleanshot.com
+desktop,app,dbeaver.io,https://dbeaver.io
+desktop,app,firefox.com,https://firefox.com
+desktop,app,ghostty.org,https://ghostty.org
+desktop,app,git-fork.com,https://git-fork.com
+desktop,app,git-tower.com,https://git-tower.com
+desktop,app,gitkraken.com,https://gitkraken.com
+desktop,app,ia.net,https://ia.net
+desktop,app,iina.io,https://iina.io
+desktop,app,insomnia.rest,https://insomnia.rest
+desktop,app,iterm2.com,https://iterm2.com
+desktop,app,jetbrains.com,https://jetbrains.com
+desktop,app,literatureandlatte.com,https://literatureandlatte.com
+desktop,app,macbartender.com,https://macbartender.com
+desktop,app,mimestream.com,https://mimestream.com
+desktop,app,Nova,https://nova.app
+desktop,app,Obsidian,https://obsidian.md
+desktop,app,obsproject.com,https://obsproject.com
+desktop,app,Pixelmator Pro,https://www.pixelmator.com/pro
+desktop,app,Raycast,https://www.raycast.com
+desktop,app,rectangleapp.com,https://rectangleapp.com
+desktop,app,setapp.com,https://setapp.com
+desktop,app,Sketch,https://www.sketch.com
+desktop,app,sparkmailapp.com,https://sparkmailapp.com
+desktop,app,steampowered.com,https://steampowered.com
+desktop,app,Sublime Text,https://www.sublimetext.com
+desktop,app,TablePlus,https://tableplus.com
+desktop,app,thunderbird.net,https://thunderbird.net
+desktop,app,typora.io,https://typora.io
+desktop,app,ulysses.app,https://ulysses.app
+desktop,app,usebruno.com,https://usebruno.com
+desktop,app,videolan.org,https://videolan.org
+desktop,app,Visual Studio Code,https://code.visualstudio.com
+desktop,app,vivaldi.com,https://vivaldi.com
+desktop,app,Warp,https://www.warp.dev
+desktop,app,wezterm.org,https://wezterm.org
+desktop,app,Zed,https://zed.dev
+desktop,app,zen-browser.app,https://zen-browser.app
+desktop,app,zotero.org,https://zotero.org
+desktop,consumer,Blippo+,https://blippo.plus
+desktop,consumer,Caradise,https://www.caradise.app
+desktop,editorial,Primary News in Depth,https://www.primarynewsindepth.com/
+desktop,games,Blue Prince,https://www.blueprincegame.com/
+desktop,games,Cyberpunk 2077 Ultimate Edition,https://www.cyberpunk.net/
+desktop,games,D-Day The Camera Soldier,https://www.targostories.com/dday-the-camera-soldier
+desktop,games,Despelote,https://despelote.game
+desktop,games,Is This Seat Taken?,https://www.potipoti.studio/itst/presskit
+desktop,platform guide,GNOME Human Interface Guidelines,https://developer.gnome.org/hig
+desktop,platform guide,Windows app design,https://learn.microsoft.com/windows/apps/design
+landing,ai products,ai.google,https://ai.google
+landing,ai products,Anthropic,https://www.anthropic.com
+landing,ai products,bolt.new,https://bolt.new
+landing,ai products,Buzzabout,https://buzzabout.ai/
+landing,ai products,cerebras.ai,https://cerebras.ai
+landing,ai products,ClimateGPT 3+,https://erasmus.ai
+landing,ai products,cohere.com,https://cohere.com
+landing,ai products,Cursor,https://cursor.com
+landing,ai products,deepmind.google,https://deepmind.google
+landing,ai products,ElevenLabs,https://elevenlabs.io
+landing,ai products,glean.com,https://glean.com
+landing,ai products,groq.com,https://groq.com
+landing,ai products,harvey.ai,https://harvey.ai
+landing,ai products,lumalabs.ai,https://lumalabs.ai
+landing,ai products,Mistral,https://mistral.ai
+landing,ai products,Parloa,https://www.parloa.com/
+landing,ai products,Perplexity,https://www.perplexity.ai
+landing,ai products,pika.art,https://pika.art
+landing,ai products,Restless,https://www.restless.ai/
+landing,ai products,runwayml.com,https://runwayml.com
+landing,ai products,scale.com,https://scale.com
+landing,ai products,Sierra,https://sierra.ai
+landing,ai products,stability.ai,https://stability.ai
+landing,ai products,suno.com,https://suno.com
+landing,ai products,v0.app,https://v0.app
+landing,ai products,Waymo Safety Hub,https://waymo.com/
+landing,commerce,Allbirds,https://www.allbirds.com
+landing,commerce,analogue.co,https://analogue.co
+landing,commerce,Apple,https://www.apple.com
+landing,commerce,awaytravel.com,https://awaytravel.com
+landing,commerce,bang-olufsen.com,https://bang-olufsen.com
+landing,commerce,bellroy.com,https://bellroy.com
+landing,commerce,casper.com,https://casper.com
+landing,commerce,everlane.com,https://everlane.com
+landing,commerce,fellowproducts.com,https://fellowproducts.com
+landing,commerce,Glossier,https://www.glossier.com
+landing,commerce,hay.com,https://hay.com
+landing,commerce,hermanmiller.com,https://hermanmiller.com
+landing,commerce,ikea.com,https://ikea.com
+landing,commerce,leica-camera.com,https://leica-camera.com
+landing,commerce,mejuri.com,https://mejuri.com
+landing,commerce,Nothing,https://nothing.tech
+landing,commerce,oatly.com,https://oatly.com
+landing,commerce,on.com,https://on.com
+landing,commerce,panic.com,https://panic.com
+landing,commerce,patagonia.com,https://patagonia.com
+landing,commerce,play.date,https://play.date
+landing,commerce,polestar.com,https://polestar.com
+landing,commerce,rapha.cc,https://rapha.cc
+landing,commerce,remarkable.com,https://remarkable.com
+landing,commerce,rivian.com,https://rivian.com
+landing,commerce,Shopify,https://www.shopify.com
+landing,commerce,sonos.com,https://sonos.com
+landing,commerce,Teenage Engineering,https://teenage.engineering
+landing,commerce,warbyparker.com,https://warbyparker.com
+landing,consumer,Airbnb,https://www.airbnb.com
+landing,consumer,alltrails.com,https://alltrails.com
+landing,consumer,booking.com,https://booking.com
+landing,consumer,bumble.com,https://bumble.com
+landing,consumer,Clips,https://plastic.audio/clips
+landing,consumer,discord.com,https://discord.com
+landing,consumer,Duolingo,https://www.duolingo.com
+landing,consumer,Epidemic Sound,https://www.epidemicsound.com/
+landing,consumer,Headspace,https://www.headspace.com
+landing,consumer,hinge.co,https://hinge.co
+landing,consumer,instacart.com,https://instacart.com
+landing,consumer,lyft.com,https://lyft.com
+landing,consumer,netflix.com,https://netflix.com
+landing,consumer,nike.com,https://nike.com
+landing,consumer,onepeloton.com,https://onepeloton.com
+landing,consumer,ouraring.com,https://ouraring.com
+landing,consumer,soundcloud.com,https://soundcloud.com
+landing,consumer,Spotify,https://www.spotify.com
+landing,consumer,Strava,https://www.strava.com
+landing,consumer,tinder.com,https://tinder.com
+landing,consumer,twitch.tv,https://twitch.tv
+landing,consumer,uber.com,https://uber.com
+landing,consumer,vimeo.com,https://vimeo.com
+landing,dev tools,algolia.com,https://algolia.com
+landing,dev tools,Astro,https://astro.build
+landing,dev tools,auth0.com,https://auth0.com
+landing,dev tools,axiom.co,https://axiom.co
+landing,dev tools,betterstack.com,https://betterstack.com
+landing,dev tools,Bun,https://bun.sh
+landing,dev tools,Clerk,https://clerk.com
+landing,dev tools,cloudflare.com,https://cloudflare.com
+landing,dev tools,convex.dev,https://convex.dev
+landing,dev tools,datadoghq.com,https://datadoghq.com
+landing,dev tools,deno.com,https://deno.com
+landing,dev tools,digitalocean.com,https://digitalocean.com
+landing,dev tools,djangoproject.com,https://djangoproject.com
+landing,dev tools,docker.com,https://docker.com
+landing,dev tools,electronjs.org,https://electronjs.org
+landing,dev tools,elixir-lang.org,https://elixir-lang.org
+landing,dev tools,expo.dev,https://expo.dev
+landing,dev tools,flutter.dev,https://flutter.dev
+landing,dev tools,Fly.io,https://fly.io
+landing,dev tools,gitbook.com,https://gitbook.com
+landing,dev tools,go.dev,https://go.dev
+landing,dev tools,grafana.com,https://grafana.com
+landing,dev tools,hashicorp.com,https://hashicorp.com
+landing,dev tools,Incident.io,https://incident.io/
+landing,dev tools,inngest.com,https://inngest.com
+landing,dev tools,knock.app,https://knock.app
+landing,dev tools,kotlinlang.org,https://kotlinlang.org
+landing,dev tools,langchain.com,https://langchain.com
+landing,dev tools,laravel.com,https://laravel.com
+landing,dev tools,launchdarkly.com,https://launchdarkly.com
+landing,dev tools,Linear,https://linear.app
+landing,dev tools,liveblocks.io,https://liveblocks.io
+landing,dev tools,mintlify.com,https://mintlify.com
+landing,dev tools,modal.com,https://modal.com
+landing,dev tools,mux.com,https://mux.com
+landing,dev tools,Neon,https://neon.com
+landing,dev tools,netlify.com,https://netlify.com
+landing,dev tools,nextjs.org,https://nextjs.org
+landing,dev tools,pinecone.io,https://pinecone.io
+landing,dev tools,PlanetScale,https://planetscale.com
+landing,dev tools,PostHog,https://posthog.com
+landing,dev tools,postman.com,https://postman.com
+landing,dev tools,prisma.io,https://prisma.io
+landing,dev tools,Railway,https://railway.com
+landing,dev tools,react.dev,https://react.dev
+landing,dev tools,readme.com,https://readme.com
+landing,dev tools,remix.run,https://remix.run
+landing,dev tools,render.com,https://render.com
+landing,dev tools,replicate.com,https://replicate.com
+landing,dev tools,Resend,https://resend.com
+landing,dev tools,rubyonrails.org,https://rubyonrails.org
+landing,dev tools,rust-lang.org,https://rust-lang.org
+landing,dev tools,Sentry,https://sentry.io
+landing,dev tools,sourcegraph.com,https://sourcegraph.com
+landing,dev tools,storybook.js.org,https://storybook.js.org
+landing,dev tools,Stripe,https://stripe.com
+landing,dev tools,stytch.com,https://stytch.com
+landing,dev tools,Supabase,https://supabase.com
+landing,dev tools,svelte.dev,https://svelte.dev
+landing,dev tools,swift.org,https://swift.org
+landing,dev tools,Tailscale,https://tailscale.com
+landing,dev tools,tailwindcss.com,https://tailwindcss.com
+landing,dev tools,tauri.app,https://tauri.app
+landing,dev tools,temporal.io,https://temporal.io
+landing,dev tools,together.ai,https://together.ai
+landing,dev tools,trigger.dev,https://trigger.dev
+landing,dev tools,turso.tech,https://turso.tech
+landing,dev tools,twilio.com,https://twilio.com
+landing,dev tools,upstash.com,https://upstash.com
+landing,dev tools,Vercel,https://vercel.com
+landing,dev tools,vuejs.org,https://vuejs.org
+landing,dev tools,weaviate.io,https://weaviate.io
+landing,dev tools,windsurf.com,https://windsurf.com
+landing,dev tools,workos.com,https://workos.com
+landing,editorial,404media.co,https://404media.co
+landing,editorial,aeon.co,https://aeon.co
+landing,editorial,apnews.com,https://apnews.com
+landing,editorial,Are.na,https://www.are.na
+landing,editorial,arstechnica.com,https://arstechnica.com
+landing,editorial,bbc.com,https://bbc.com
+landing,editorial,itsnicethat.com,https://itsnicethat.com
+landing,editorial,kinfolk.com,https://kinfolk.com
+landing,editorial,newyorker.com,https://newyorker.com
+landing,editorial,npr.org,https://npr.org
+landing,editorial,pitchfork.com,https://pitchfork.com
+landing,editorial,propublica.org,https://propublica.org
+landing,editorial,Readwise,https://readwise.io
+landing,editorial,restofworld.org,https://restofworld.org
+landing,editorial,semafor.com,https://semafor.com
+landing,editorial,stratechery.com,https://stratechery.com
+landing,editorial,The Verge,https://www.theverge.com
+landing,editorial,theatlantic.com,https://theatlantic.com
+landing,editorial,theguardian.com,https://theguardian.com
+landing,editorial,vox.com,https://vox.com
+landing,editorial,wired.com,https://wired.com
+landing,finance,AccessGrid,https://accessgrid.com/
+landing,finance,adyen.com,https://adyen.com
+landing,finance,affirm.com,https://affirm.com
+landing,finance,betterment.com,https://betterment.com
+landing,finance,bill.com,https://bill.com
+landing,finance,Brex,https://www.brex.com
+landing,finance,Causal,https://causal.so/
+landing,finance,checkout.com,https://checkout.com
+landing,finance,chime.com,https://chime.com
+landing,finance,Enode,https://enode.com/
+landing,finance,expensify.com,https://expensify.com
+landing,finance,kraken.com,https://kraken.com
+landing,finance,lemonsqueezy.com,https://lemonsqueezy.com
+landing,finance,Mercury,https://mercury.com
+landing,finance,monarchmoney.com,https://monarchmoney.com
+landing,finance,Monzo,https://monzo.com
+landing,finance,n26.com,https://n26.com
+landing,finance,paddle.com,https://paddle.com
+landing,finance,pilot.com,https://pilot.com
+landing,finance,plaid.com,https://plaid.com
+landing,finance,public.com,https://public.com
+landing,finance,Ramp,https://ramp.com
+landing,finance,Robinhood,https://robinhood.com
+landing,finance,squareup.com,https://squareup.com
+landing,finance,starlingbank.com,https://starlingbank.com
+landing,finance,wealthfront.com,https://wealthfront.com
+landing,finance,Wise,https://wise.com
+landing,finance,xero.com,https://xero.com
+landing,finance,ynab.com,https://ynab.com
+landing,health,Abridge,https://abridge.com
+landing,hr and payroll,Papaya Global,https://papayaglobal.com
+landing,nonprofit and education,brilliant.org,https://brilliant.org
+landing,nonprofit and education,charitywater.org,https://charitywater.org
+landing,nonprofit and education,codecademy.com,https://codecademy.com
+landing,nonprofit and education,coursera.org,https://coursera.org
+landing,nonprofit and education,edx.org,https://edx.org
+landing,nonprofit and education,harvard.edu,https://harvard.edu
+landing,nonprofit and education,khanacademy.org,https://khanacademy.org
+landing,nonprofit and education,metmuseum.org,https://metmuseum.org
+landing,nonprofit and education,mit.edu,https://mit.edu
+landing,nonprofit and education,mozilla.org,https://mozilla.org
+landing,nonprofit and education,nasa.gov,https://nasa.gov
+landing,nonprofit and education,rijksmuseum.nl,https://rijksmuseum.nl
+landing,nonprofit and education,sfmoma.org,https://sfmoma.org
+landing,nonprofit and education,stanford.edu,https://stanford.edu
+landing,nonprofit and education,tate.org.uk,https://tate.org.uk
+landing,nonprofit and education,usa.gov,https://usa.gov
+landing,nonprofit and education,wikipedia.org,https://wikipedia.org
+landing,productivity,37signals.com,https://37signals.com
+landing,productivity,Airtable,https://www.airtable.com
+landing,productivity,akiflow.com,https://akiflow.com
+landing,productivity,asana.com,https://asana.com
+landing,productivity,atlassian.com,https://atlassian.com
+landing,productivity,attio.com,https://attio.com
+landing,productivity,Basecamp,https://basecamp.com
+landing,productivity,beautiful.ai,https://beautiful.ai
+landing,productivity,box.com,https://box.com
+landing,productivity,Cal.com,https://cal.com
+landing,productivity,calendly.com,https://calendly.com
+landing,productivity,capacities.io,https://capacities.io
+landing,productivity,clickup.com,https://clickup.com
+landing,productivity,coda.io,https://coda.io
+landing,productivity,Craft,https://www.craft.do
+landing,productivity,deel.com,https://deel.com
+landing,productivity,descript.com,https://descript.com
+landing,productivity,docusign.com,https://docusign.com
+landing,productivity,dropbox.com,https://dropbox.com
+landing,productivity,fastmail.com,https://fastmail.com
+landing,productivity,Figma,https://www.figma.com
+landing,productivity,folk.app,https://folk.app
+landing,productivity,framer.com,https://framer.com
+landing,productivity,front.com,https://front.com
+landing,productivity,ghost.org,https://ghost.org
+landing,productivity,grammarly.com,https://grammarly.com
+landing,productivity,granola.ai,https://granola.ai
+landing,productivity,heptabase.com,https://heptabase.com
+landing,productivity,hey.com,https://hey.com
+landing,productivity,hubspot.com,https://hubspot.com
+landing,productivity,intercom.com,https://intercom.com
+landing,productivity,lattice.com,https://lattice.com
+landing,productivity,logseq.com,https://logseq.com
+landing,productivity,Loom,https://www.loom.com
+landing,productivity,mailchimp.com,https://mailchimp.com
+landing,productivity,make.com,https://make.com
+landing,productivity,mem.ai,https://mem.ai
+landing,productivity,Miro,https://miro.com
+landing,productivity,missiveapp.com,https://missiveapp.com
+landing,productivity,monday.com,https://monday.com
+landing,productivity,mymind.com,https://mymind.com
+landing,productivity,n8n.io,https://n8n.io
+landing,productivity,Notion,https://www.notion.com
+landing,productivity,otter.ai,https://otter.ai
+landing,productivity,Patensify,https://patensify.com/en/
+landing,productivity,pipedrive.com,https://pipedrive.com
+landing,productivity,Pitch,https://pitch.com
+landing,productivity,proton.me,https://proton.me
+landing,productivity,raindrop.io,https://raindrop.io
+landing,productivity,reflect.app,https://reflect.app
+landing,productivity,remote.com,https://remote.com
+landing,productivity,retool.com,https://retool.com
+landing,productivity,rippling.com,https://rippling.com
+landing,productivity,riverside.fm,https://riverside.fm
+landing,productivity,shortcut.com,https://shortcut.com
+landing,productivity,Slack,https://slack.com
+landing,productivity,squarespace.com,https://squarespace.com
+landing,productivity,sunsama.com,https://sunsama.com
+landing,productivity,Superhuman,https://superhuman.com
+landing,productivity,tally.so,https://tally.so
+landing,productivity,tana.inc,https://tana.inc
+landing,productivity,Todoist,https://www.todoist.com
+landing,productivity,trello.com,https://trello.com
+landing,productivity,typeform.com,https://typeform.com
+landing,productivity,usemotion.com,https://usemotion.com
+landing,productivity,webflow.com,https://webflow.com
+landing,productivity,wix.com,https://wix.com
+landing,productivity,wordpress.com,https://wordpress.com
+landing,productivity,zapier.com,https://zapier.com
+landing,productivity,zendesk.com,https://zendesk.com
+landing,productivity,zoom.com,https://zoom.com
+landing,studio,Atomicdust,https://atomicdust.com/
+landing,studio,Carter Ogunsola,https://carterogunsola.com/
+landing,studio,Driessen Architectuur,https://driessenarchitectuur.nl/
+landing,studio,Eli Horn,https://elihorn.ca/
+landing,studio,Ev Astapov,https://astapable.com/
+landing,studio,Ilnaz Khasanshin,https://ntch.design
+landing,studio,In My Shoes,https://inmysho.es/
+landing,studio,JUNGLE,https://www.yanndo.com
+landing,studio,Kalok Yeung,https://www.kalokyeung.com/
+landing,studio,La Coignardiere,https://lacoignardiere.com
+landing,studio,Little Website Co,https://littlewebsite.co/
+landing,studio,Mathias Adolfsson,https://mathiasadolfsson.dev/
+landing,studio,Melike Turgut,https://meliketurgut.com/
+landing,studio,Oluwatobi Salawu,https://oluwatobisalawu.com
+landing,studio,Onlines,https://onlines.com.ar/
+landing,studio,Pete Sena,https://petesena.com
+landing,studio,Philipp Hafner,https://philipphafner.com/
+landing,studio,pu-ente,https://www.pu-ente.com/en/
+landing,studio,Registered Commons,https://registered-commons.com/
+landing,studio,Spyker Cars,https://spykercars.com/
+landing,studio,Tegra,https://www.tegra.nyc
+landing,studio,Tequs,https://www.tequs.com/
+landing,studio,Thursday's Child,https://www.thursdayschild.global/
+landing,studio,Vasiliy Kiselev,https://kiselevvv.xyz/
+landing,studio and service,Basement Studio,https://basement.studio
+landing,studio and service,Equinox,https://www.equinox.com
+landing,studio and service,fantasy.co,https://fantasy.co
+landing,studio and service,frog.co,https://frog.co
+landing,studio and service,hugeinc.com,https://hugeinc.com
+landing,studio and service,ideo.com,https://ideo.com
+landing,studio and service,Instrument,https://www.instrument.com
+landing,studio and service,koto.studio,https://koto.studio
+landing,studio and service,locomotive.ca,https://locomotive.ca
+landing,studio and service,metalab.com,https://metalab.com
+landing,studio and service,nhs.uk,https://nhs.uk
+landing,studio and service,noom.com,https://noom.com
+landing,studio and service,onemedical.com,https://onemedical.com
+landing,studio and service,Pentagram,https://www.pentagram.com
+landing,studio and service,rga.com,https://rga.com
+landing,studio and service,ro.co,https://ro.co
+landing,studio and service,Sweetgreen,https://www.sweetgreen.com
+landing,studio and service,wearecollins.com,https://wearecollins.com
+landing,studio and service,work.co,https://work.co
+landing,travel and expense,Navan,https://navan.com
+mobile,app,agenda.com,https://agenda.com
+mobile,app,Amie,https://amie.so
+mobile,app,any.do,https://any.do
+mobile,app,balanceapp.com,https://balanceapp.com
+mobile,app,Bear,https://bear.app
+mobile,app,bereal.com,https://bereal.com
+mobile,app,Carrot Weather,https://www.meetcarrot.com/weather
+mobile,app,Cash App,https://cash.app
+mobile,app,castro.fm,https://castro.fm
+mobile,app,citymapper.com,https://citymapper.com
+mobile,app,Copilot Money,https://copilot.money
+mobile,app,Darkroom,https://darkroom.co
+mobile,app,Day One,https://dayoneapp.com
+mobile,app,endel.io,https://endel.io
+mobile,app,Fantastical,https://flexibits.com/fantastical
+mobile,app,finchcare.com,https://finchcare.com
+mobile,app,Flighty,https://flighty.com
+mobile,app,gentler.app,https://gentler.app
+mobile,app,getslopes.com,https://getslopes.com
+mobile,app,goodnotes.com,https://goodnotes.com
+mobile,app,Halide,https://halide.cam
+mobile,app,Ivory,https://tapbots.com/ivory
+mobile,app,netnewswire.com,https://netnewswire.com
+mobile,app,notability.com,https://notability.com
+mobile,app,Opal,https://www.opal.so
+mobile,app,Overcast,https://overcast.fm
+mobile,app,pocketcasts.com,https://pocketcasts.com
+mobile,app,procreate.com,https://procreate.com
+mobile,app,reederapp.com,https://reederapp.com
+mobile,app,shazam.com,https://shazam.com
+mobile,app,Signal,https://signal.org
+mobile,app,sofascore.com,https://sofascore.com
+mobile,app,splitwise.com,https://splitwise.com
+mobile,app,Streaks,https://streaksapp.com
+mobile,app,Telegram,https://telegram.org
+mobile,app,Things,https://culturedcode.com/things
+mobile,app,ticktick.com,https://ticktick.com
+mobile,app,tiimoapp.com,https://tiimoapp.com
+mobile,app,toogoodtogo.com,https://toogoodtogo.com
+mobile,app,tot.rocks,https://tot.rocks
+mobile,app,transitapp.com,https://transitapp.com
+mobile,app,windy.com,https://windy.com
+mobile,app,wolt.com,https://wolt.com
+mobile,consumer,grug,https://ocho.so
+mobile,consumer,Guitar Wiz,https://guitarwiz.app
+mobile,consumer,Katha Room Bedtime Audio Tales,https://www.parjanya.org
+mobile,consumer,Metaballs,https://www.apposite.ai/metaballs.html
+mobile,consumer,Not Boring Camera,https://notbor.ing
+mobile,consumer,Tide Guide Charts and Tables,https://tideguide.com
+mobile,creative,Detail AI Video Editor,https://detail.co
+mobile,education,Sago Mini Jinja's Garden,https://sagomini.com
+mobile,games,Ball x Pit,https://www.devolverdigital.com/
+mobile,games,Civilization VII,https://civilization.2k.com/civ-vii/
+mobile,games,PowerWash Simulator,https://www.futurlab.co.uk/games/powerwash-simulator-mobile
+mobile,games,SILT,https://www.snapbreak.com/
+mobile,games,Spilled,https://sound.games/games.html
+mobile,games,TR-49,https://www.inklestudios.com/tr-49
+mobile,health,Harvee,https://harvee.app/
+mobile,health,Hearing Buddy,https://hearingbuddyapp.com
+mobile,health,Moonlitt Moon Phase Tracker,https://www.flippinghues.com/moonlitt
+mobile,health,The Outsiders Athlete Tracker,https://gentlerstories.com/theoutsiders
+mobile,platform guide,Apple Human Interface Guidelines,https://developer.apple.com/design/human-interface-guidelines
+mobile,platform guide,Material 3,https://m3.material.io
+mobile,productivity,Structured,https://structured.app
+web app,commerce,Bagisto,https://demo.bagisto.com/
+web app,commerce,Medusa,https://next.medusajs.com/
+web app,commerce,PrestaShop,https://demo.prestashop.com/
+web app,commerce,Shopware,https://www.shopware.com/en/test-demo/
+web app,commerce,Sylius,https://sylius.com/try/
+web app,design system,Adobe Spectrum,https://spectrum.adobe.com
+web app,design system,Alaska Airlines Auro,https://auro.alaskaair.com/
+web app,design system,Ant Design,https://ant.design
+web app,design system,Atlassian Design,https://atlassian.design
+web app,design system,AWS Cloudscape,https://cloudscape.design/
+web app,design system,BBC GEL,https://www.bbc.co.uk/gel
+web app,design system,Bento DS,https://bento-ds.com
+web app,design system,Blueprint,https://blueprintjs.com/
+web app,design system,Braid,https://seek-oss.github.io/braid-design-system/
+web app,design system,British Gas Nucleus,https://britishgas.design/
+web app,design system,BuzzFeed Solid,https://solid.buzzfeed.com/
+web app,design system,Chakra UI,https://chakra-ui.com/
+web app,design system,Contentful Forma 36,https://f36.contentful.com/
+web app,design system,Culture Amp Kaizen,https://cultureamp.design/
+web app,design system,daisyUI,https://daisyui.com/
+web app,design system,eBay Skin,https://opensource.ebay.com/evo-web/
+web app,design system,Elastic EUI,https://elastic.github.io/eui/
+web app,design system,ENGIE Fluid,https://www.engie.design
+web app,design system,Fluent UI,https://developer.microsoft.com/en-us/fluentui
+web app,design system,Foundation,https://get.foundation/
+web app,design system,GitHub Primer,https://primer.style
+web app,design system,GOV.UK Design System,https://www.gov.uk/design-system
+web app,design system,Grommet,https://grommet.github.io
+web app,design system,Gympass Yoga,https://gympass.github.io/yoga/
+web app,design system,HashiCorp Helios,https://helios.hashicorp.design
+web app,design system,HeroUI,https://heroui.com/
+web app,design system,IBM Carbon,https://carbondesignsystem.com
+web app,design system,IBM Design Language,https://www.ibm.com/design/language/
+web app,design system,Intuit Harmony,https://designsystem.quickbooks.com/
+web app,design system,Italia Design System,https://designers.italia.it/design-system/
+web app,design system,JetBrains Ring UI,https://jetbrains.github.io/ring-ui
+web app,design system,Just Eat PIE,https://pie.design/
+web app,design system,Mantine,https://mantine.dev/
+web app,design system,Material Minimal,https://material-minimal.com/
+web app,design system,Meta Astryx,https://astryx.atmeta.com/
+web app,design system,Microsoft Fluent 2,https://fluent2.microsoft.design
+web app,design system,Mixpanel Design System,https://design.mixpanel.com
+web app,design system,Mozilla Protocol,https://protocol.mozilla.org/
+web app,design system,MUI Material UI,https://mui.com/material-ui/
+web app,design system,NASA Web Design System,https://nasa.github.io/nasawds-site/
+web app,design system,Nordhealth,https://nordhealth.design/
+web app,design system,NVIDIA Elements,https://nvidia.github.io/elements/
+web app,design system,Okta Odyssey,https://odyssey-storybook.okta.design/
+web app,design system,Pinterest Gestalt,https://pinterest.github.io/gestalt/
+web app,design system,Porsche Design System,https://designsystem.porsche.com
+web app,design system,Radix,https://www.radix-ui.com
+web app,design system,REI Cedar,https://rei.github.io/rei-cedar-docs/
+web app,design system,Sage by Kajabi,https://sage.kajabi.com
+web app,design system,Salesforce Lightning,https://www.lightningdesignsystem.com
+web app,design system,Scania Tegel,https://tegel.scania.com
+web app,design system,Seeds Sprout Social,https://sproutsocial.com/seeds
+web app,design system,Semi Design,https://semi.design/en-US
+web app,design system,Semrush Intergalactic,https://i.semrush.com/
+web app,design system,Shoelace,https://shoelace.style
+web app,design system,Shopify Polaris,https://polaris.shopify.com
+web app,design system,Siemens iX,https://ix.siemens.io/
+web app,design system,Singapore Government Design System,https://www.designsystem.tech.gov.sg/
+web app,design system,Twilio Paste,https://paste.twilio.design
+web app,design system,Uber Base,https://base.uber.com
+web app,dev tools,ChartDB,https://app.chartdb.io
+web app,dev tools,drawDB,https://www.drawdb.app/editor
+web app,dev tools,Forgejo,https://next.forgejo.org
+web app,dev tools,Gitea,https://gitea.com/explore/repos
+web app,documents,Docuseal,https://demo.docuseal.tech/
+web app,ebooks,Calibre,https://calibre-ebook.com/demo
+web app,ebooks,Kavita,https://www.kavitareader.com/#demo
+web app,education,Moodle,https://moodle.org/demo/
+web app,events,Hi.Events,https://demo.hi.events/event/1/dog-conf-2030
+web app,feedback,Fider,https://demo.fider.io
+web app,file storage,Nextcloud,https://try.nextcloud.com/
+web app,forms,LimeSurvey,https://demo.limesurvey.org
+web app,forum,NodeBB,https://try.nodebb.org/
+web app,health,OpenEMR,https://www.open-emr.org/demo/
+web app,media,Ombi,https://app.ombi.io/
+web app,music,Navidrome,https://www.navidrome.org/demo
+web app,notes,HedgeDoc,https://demo.hedgedoc.org/
+web app,notes,Standard Notes,https://app.standardnotes.com/
+web app,photos,PhotoPrism,https://demo.photoprism.app/library/browse
+web app,project management,Plane,https://app.plane.so
+web app,public app,Bluesky,https://bsky.app
+web app,public app,Excalidraw,https://excalidraw.com
+web app,public app,GitHub repository page,https://github.com/microsoft/vscode
+web app,public app,GitLab project page,https://gitlab.com/gitlab-org/gitlab
+web app,public app,Grafana Play,https://play.grafana.org
+web app,public app,Hugging Face,https://huggingface.co
+web app,public app,Lichess,https://lichess.org
+web app,public app,Mastodon,https://mastodon.social
+web app,public app,Monkeytype,https://monkeytype.com
+web app,public app,OpenStreetMap,https://www.openstreetmap.org
+web app,public app,Photopea,https://www.photopea.com
+web app,public app,Plausible live stats,https://plausible.io/plausible.io
+web app,public app,regex101,https://regex101.com
+web app,public app,StackBlitz,https://stackblitz.com
+web app,public app,Stripe Docs,https://docs.stripe.com
+web app,public app,tldraw,https://www.tldraw.com
+web app,rss,FreshRSS,https://demo.freshrss.org/i/
+web app,scheduling,Easy!Appointments,https://demo.easyappointments.org/
+web app,spreadsheets,Grist,https://docs.getgrist.com
+web app,time tracking,Kimai,https://www.kimai.org/demo/
+web app,video,Jitsi Meet,https://meet.jit.si
+web app,wiki,BookStack,https://www.bookstackapp.com/#demo
+web app,wiki,Wiki.js,https://docs.requarks.io

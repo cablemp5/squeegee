@@ -1,0 +1,678 @@
+{
+  "pages": {
+    "reference": 565,
+    "aiBuilt": 273,
+    "referenceLanding": 282,
+    "aiBuiltLanding": 84
+  },
+  "bySurface": [
+    [
+      "landing",
+      336
+    ],
+    [
+      "web app",
+      107
+    ],
+    [
+      "mobile",
+      64
+    ],
+    [
+      "desktop",
+      58
+    ]
+  ],
+  "byBuilder": [
+    [
+      "replit",
+      88
+    ],
+    [
+      "lovable",
+      79
+    ],
+    [
+      "base44",
+      57
+    ],
+    [
+      "bolt",
+      48
+    ],
+    [
+      "v0",
+      1
+    ]
+  ],
+  "signals": [
+    {
+      "signal": "shadcn-style theme variables present",
+      "reference": 4,
+      "aiBuilt": 56,
+      "referenceLanding": 6,
+      "aiBuiltLanding": 87,
+      "lift": 11.1
+    },
+    {
+      "signal": "Three or more checkmark list items",
+      "reference": 1,
+      "aiBuilt": 8,
+      "referenceLanding": 1,
+      "aiBuiltLanding": 24,
+      "lift": 8.7
+    },
+    {
+      "signal": "Lucide icons",
+      "reference": 6,
+      "aiBuilt": 56,
+      "referenceLanding": 10,
+      "aiBuiltLanding": 87,
+      "lift": 7.4
+    },
+    {
+      "signal": "Pill badge above the headline",
+      "reference": 5,
+      "aiBuilt": 14,
+      "referenceLanding": 6,
+      "aiBuiltLanding": 35,
+      "lift": 4.6
+    },
+    {
+      "signal": "No chosen font (system default stack)",
+      "reference": 23,
+      "aiBuilt": 45,
+      "referenceLanding": 15,
+      "aiBuiltLanding": 58,
+      "lift": 3.5
+    },
+    {
+      "signal": "Headline weight 700 or more",
+      "reference": 28,
+      "aiBuilt": 43,
+      "referenceLanding": 22,
+      "aiBuiltLanding": 67,
+      "lift": 2.9
+    },
+    {
+      "signal": "Left stripe card",
+      "reference": 2,
+      "aiBuilt": 2,
+      "referenceLanding": 1,
+      "aiBuiltLanding": 6,
+      "lift": 2.7
+    },
+    {
+      "signal": "Tailwind classes",
+      "reference": 26,
+      "aiBuilt": 66,
+      "referenceLanding": 36,
+      "aiBuiltLanding": 96,
+      "lift": 2.6
+    },
+    {
+      "signal": "Inter",
+      "reference": 20,
+      "aiBuilt": 29,
+      "referenceLanding": 24,
+      "aiBuiltLanding": 50,
+      "lift": 2
+    },
+    {
+      "signal": "Tracked uppercase labels",
+      "reference": 19,
+      "aiBuilt": 23,
+      "referenceLanding": 24,
+      "aiBuiltLanding": 51,
+      "lift": 2
+    },
+    {
+      "signal": "Gradient text",
+      "reference": 12,
+      "aiBuilt": 16,
+      "referenceLanding": 16,
+      "aiBuiltLanding": 32,
+      "lift": 1.9
+    },
+    {
+      "signal": "Body text under 16 px",
+      "reference": 36,
+      "aiBuilt": 74,
+      "referenceLanding": 35,
+      "aiBuiltLanding": 63,
+      "lift": 1.8
+    },
+    {
+      "signal": "10% or more of text is low contrast",
+      "reference": 25,
+      "aiBuilt": 29,
+      "referenceLanding": 24,
+      "aiBuiltLanding": 37,
+      "lift": 1.5
+    },
+    {
+      "signal": "Cards inside cards",
+      "reference": 18,
+      "aiBuilt": 15,
+      "referenceLanding": 23,
+      "aiBuiltLanding": 35,
+      "lift": 1.5
+    },
+    {
+      "signal": "Glass (backdrop blur)",
+      "reference": 38,
+      "aiBuilt": 37,
+      "referenceLanding": 48,
+      "aiBuiltLanding": 67,
+      "lift": 1.4
+    },
+    {
+      "signal": "Most common radius 12 px or more",
+      "reference": 40,
+      "aiBuilt": 34,
+      "referenceLanding": 44,
+      "aiBuiltLanding": 61,
+      "lift": 1.4
+    },
+    {
+      "signal": "Dark page",
+      "reference": 35,
+      "aiBuilt": 29,
+      "referenceLanding": 27,
+      "aiBuiltLanding": 37,
+      "lift": 1.3
+    },
+    {
+      "signal": "transition: all",
+      "reference": 52,
+      "aiBuilt": 50,
+      "referenceLanding": 65,
+      "aiBuiltLanding": 83,
+      "lift": 1.3
+    },
+    {
+      "signal": "Centered headline",
+      "reference": 36,
+      "aiBuilt": 64,
+      "referenceLanding": 40,
+      "aiBuiltLanding": 50,
+      "lift": 1.2
+    },
+    {
+      "signal": "No reduced-motion rule",
+      "reference": 41,
+      "aiBuilt": 59,
+      "referenceLanding": 32,
+      "aiBuiltLanding": 39,
+      "lift": 1.2
+    },
+    {
+      "signal": "Large gradient area",
+      "reference": 40,
+      "aiBuilt": 36,
+      "referenceLanding": 52,
+      "aiBuiltLanding": 64,
+      "lift": 1.2
+    },
+    {
+      "signal": "Em dash on the page",
+      "reference": 44,
+      "aiBuilt": 31,
+      "referenceLanding": 60,
+      "aiBuiltLanding": 70,
+      "lift": 1.2
+    },
+    {
+      "signal": "Emoji in headings or buttons",
+      "reference": 9,
+      "aiBuilt": 9,
+      "referenceLanding": 11,
+      "aiBuiltLanding": 12,
+      "lift": 1.1
+    },
+    {
+      "signal": "A quarter or more of controls under 24 px",
+      "reference": 62,
+      "aiBuilt": 62,
+      "referenceLanding": 62,
+      "aiBuiltLanding": 64,
+      "lift": 1
+    },
+    {
+      "signal": "Three or more font families",
+      "reference": 33,
+      "aiBuilt": 23,
+      "referenceLanding": 42,
+      "aiBuiltLanding": 38,
+      "lift": 0.9
+    },
+    {
+      "signal": "Three equal icon cards in a row",
+      "reference": 37,
+      "aiBuilt": 19,
+      "referenceLanding": 52,
+      "aiBuiltLanding": 45,
+      "lift": 0.9
+    },
+    {
+      "signal": "Four or more distinct hues",
+      "reference": 9,
+      "aiBuilt": 3,
+      "referenceLanding": 11,
+      "aiBuiltLanding": 8,
+      "lift": 0.8
+    },
+    {
+      "signal": "Purple or violet is 30% or more of colored area",
+      "reference": 9,
+      "aiBuilt": 4,
+      "referenceLanding": 9,
+      "aiBuiltLanding": 6,
+      "lift": 0.7
+    },
+    {
+      "signal": "Bento grid",
+      "reference": 16,
+      "aiBuilt": 6,
+      "referenceLanding": 25,
+      "aiBuiltLanding": 17,
+      "lift": 0.7
+    },
+    {
+      "signal": "Two or more hype words",
+      "reference": 28,
+      "aiBuilt": 8,
+      "referenceLanding": 36,
+      "aiBuiltLanding": 23,
+      "lift": 0.7
+    },
+    {
+      "signal": "Pure white page",
+      "reference": 48,
+      "aiBuilt": 28,
+      "referenceLanding": 56,
+      "aiBuiltLanding": 33,
+      "lift": 0.6
+    },
+    {
+      "signal": "Blue-violet is 30% or more of colored area",
+      "reference": 14,
+      "aiBuilt": 3,
+      "referenceLanding": 17,
+      "aiBuiltLanding": 6,
+      "lift": 0.4
+    },
+    {
+      "signal": "Geist",
+      "reference": 5,
+      "aiBuilt": 1,
+      "referenceLanding": 7,
+      "aiBuiltLanding": 0,
+      "lift": 0.2
+    }
+  ],
+  "cluster": [
+    {
+      "atLeast": 3,
+      "reference": 31,
+      "aiBuilt": 96,
+      "referenceLanding": 30,
+      "aiBuiltLanding": 96
+    },
+    {
+      "atLeast": 4,
+      "reference": 9,
+      "aiBuilt": 60,
+      "referenceLanding": 10,
+      "aiBuiltLanding": 92
+    },
+    {
+      "atLeast": 5,
+      "reference": 2,
+      "aiBuilt": 46,
+      "referenceLanding": 2,
+      "aiBuiltLanding": 76
+    },
+    {
+      "atLeast": 6,
+      "reference": 1,
+      "aiBuilt": 26,
+      "referenceLanding": 1,
+      "aiBuiltLanding": 45
+    },
+    {
+      "atLeast": 7,
+      "reference": 0,
+      "aiBuilt": 11,
+      "referenceLanding": 0,
+      "aiBuiltLanding": 21
+    }
+  ],
+  "medians": [
+    {
+      "measure": "Body text size (px)",
+      "p10": 13,
+      "reference": 16,
+      "p90": 20,
+      "aiBuilt": 14
+    },
+    {
+      "measure": "Headline size (px)",
+      "p10": 24,
+      "reference": 56,
+      "p90": 86,
+      "aiBuilt": 36
+    },
+    {
+      "measure": "Headline weight",
+      "p10": 400,
+      "reference": 500,
+      "p90": 700,
+      "aiBuilt": 600
+    },
+    {
+      "measure": "Headline line height",
+      "p10": 0.98,
+      "reference": 1.1,
+      "p90": 1.33,
+      "aiBuilt": 1.11
+    },
+    {
+      "measure": "Headline to body size ratio",
+      "p10": 1.4,
+      "reference": 3.5,
+      "p90": 5.5,
+      "aiBuilt": 4
+    },
+    {
+      "measure": "Font families",
+      "p10": 1,
+      "reference": 2,
+      "p90": 4,
+      "aiBuilt": 2
+    },
+    {
+      "measure": "Distinct text sizes",
+      "p10": 4,
+      "reference": 9,
+      "p90": 14,
+      "aiBuilt": 6
+    },
+    {
+      "measure": "Most common radius (px)",
+      "p10": 3,
+      "reference": 8,
+      "p90": 50,
+      "aiBuilt": 10
+    },
+    {
+      "measure": "Most common transition (ms)",
+      "p10": 100,
+      "reference": 200,
+      "p90": 350,
+      "aiBuilt": 150
+    },
+    {
+      "measure": "Saturated hues",
+      "p10": 0,
+      "reference": 1,
+      "p90": 3,
+      "aiBuilt": 1
+    },
+    {
+      "measure": "Navigation links",
+      "p10": 0,
+      "reference": 7,
+      "p90": 59,
+      "aiBuilt": 0
+    },
+    {
+      "measure": "Sections",
+      "p10": 0,
+      "reference": 6,
+      "p90": 13,
+      "aiBuilt": 1
+    },
+    {
+      "measure": "Words on the page",
+      "p10": 125,
+      "reference": 661,
+      "p90": 1681,
+      "aiBuilt": 122
+    },
+    {
+      "measure": "Page length (screens)",
+      "p10": 1,
+      "reference": 7.5,
+      "p90": 14.6,
+      "aiBuilt": 1.2
+    }
+  ],
+  "referenceFacts": [
+    {
+      "fact": "Two or fewer font families",
+      "reference": 67
+    },
+    {
+      "fact": "One saturated button color or none",
+      "reference": 73
+    },
+    {
+      "fact": "No saturated button color",
+      "reference": 36
+    },
+    {
+      "fact": "Serif headline face",
+      "reference": 5
+    },
+    {
+      "fact": "Monospace face present",
+      "reference": 28
+    },
+    {
+      "fact": "Pill shapes (3 or more fully rounded elements)",
+      "reference": 32
+    }
+  ],
+  "phoneFacts": {
+    "headline": 36,
+    "body": 16
+  },
+  "profiles": [
+    {
+      "group": "web apps and design systems",
+      "pages": 107,
+      "dark": 40,
+      "white": 46,
+      "mono": 30,
+      "serif": 2,
+      "pill": 15,
+      "noAccent": 36,
+      "radius": 6,
+      "headline": 42,
+      "weight": 600,
+      "body": 16,
+      "words": 232
+    },
+    {
+      "group": "dev tools",
+      "pages": 74,
+      "dark": 57,
+      "white": 30,
+      "mono": 73,
+      "serif": 5,
+      "pill": 58,
+      "noAccent": 20,
+      "radius": 8,
+      "headline": 62,
+      "weight": 500,
+      "body": 16,
+      "words": 944
+    },
+    {
+      "group": "productivity",
+      "pages": 71,
+      "dark": 14,
+      "white": 66,
+      "mono": 18,
+      "serif": 10,
+      "pill": 39,
+      "noAccent": 24,
+      "radius": 12,
+      "headline": 64,
+      "weight": 500,
+      "body": 16,
+      "words": 959
+    },
+    {
+      "group": "mobile app product sites",
+      "pages": 64,
+      "dark": 42,
+      "white": 45,
+      "mono": 8,
+      "serif": 3,
+      "pill": 25,
+      "noAccent": 39,
+      "radius": 18,
+      "headline": 60,
+      "weight": 700,
+      "body": 16,
+      "words": 579
+    },
+    {
+      "group": "desktop app product sites",
+      "pages": 58,
+      "dark": 48,
+      "white": 28,
+      "mono": 17,
+      "serif": 5,
+      "pill": 22,
+      "noAccent": 41,
+      "radius": 8,
+      "headline": 60,
+      "weight": 600,
+      "body": 16,
+      "words": 648
+    },
+    {
+      "group": "finance",
+      "pages": 29,
+      "dark": 10,
+      "white": 62,
+      "mono": 31,
+      "serif": 0,
+      "pill": 34,
+      "noAccent": 17,
+      "radius": 12,
+      "headline": 64,
+      "weight": 500,
+      "body": 16,
+      "words": 1263
+    },
+    {
+      "group": "commerce",
+      "pages": 29,
+      "dark": 10,
+      "white": 66,
+      "mono": 24,
+      "serif": 7,
+      "pill": 28,
+      "noAccent": 66,
+      "radius": 12,
+      "headline": 48,
+      "weight": 500,
+      "body": 16,
+      "words": 518
+    },
+    {
+      "group": "ai products",
+      "pages": 26,
+      "dark": 42,
+      "white": 42,
+      "mono": 42,
+      "serif": 0,
+      "pill": 73,
+      "noAccent": 50,
+      "radius": 8,
+      "headline": 56,
+      "weight": 440,
+      "body": 16,
+      "words": 718
+    },
+    {
+      "group": "studio",
+      "pages": 24,
+      "dark": 38,
+      "white": 42,
+      "mono": 17,
+      "serif": 4,
+      "pill": 13,
+      "noAccent": 63,
+      "radius": 4,
+      "headline": 45,
+      "weight": 500,
+      "body": 14,
+      "words": 210
+    },
+    {
+      "group": "consumer",
+      "pages": 23,
+      "dark": 30,
+      "white": 57,
+      "mono": 4,
+      "serif": 4,
+      "pill": 48,
+      "noAccent": 39,
+      "radius": 12,
+      "headline": 56,
+      "weight": 600,
+      "body": 16,
+      "words": 398
+    },
+    {
+      "group": "editorial",
+      "pages": 21,
+      "dark": 29,
+      "white": 62,
+      "mono": 29,
+      "serif": 29,
+      "pill": 14,
+      "noAccent": 38,
+      "radius": 4,
+      "headline": 38,
+      "weight": 700,
+      "body": 16,
+      "words": 1642
+    },
+    {
+      "group": "studio and service",
+      "pages": 19,
+      "dark": 21,
+      "white": 58,
+      "mono": 21,
+      "serif": 5,
+      "pill": 21,
+      "noAccent": 63,
+      "radius": 12,
+      "headline": 56,
+      "weight": 400,
+      "body": 16,
+      "words": 408
+    },
+    {
+      "group": "nonprofit and education",
+      "pages": 17,
+      "dark": 12,
+      "white": 76,
+      "mono": 12,
+      "serif": 6,
+      "pill": 18,
+      "noAccent": 18,
+      "radius": 10,
+      "headline": 47,
+      "weight": 600,
+      "body": 16,
+      "words": 791
+    }
+  ]
+}

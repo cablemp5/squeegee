@@ -21,14 +21,22 @@ It does not build new UI.
 
 ## 1. Install
 
-You need a coding agent, a project folder and Node.js 18 or later, which runs the detector and the comparison pages. Rerunning the research also needs Node 22 or later and an installed Chrome. In Claude Code, run:
+You need a coding agent, a project folder and Node.js 18 or later, which runs the detector and the comparison pages. Rerunning the research also needs Node 22 or later and an installed Chrome.
+
+The easiest way is to ask your agent. Paste this into its chat:
+
+```
+Install the Squeegee skill from https://github.com/cablemp5/squeegee using its README, then tell me how to run my first audit.
+```
+
+**Prefer to type the commands yourself?** In Claude Code, run:
 
 ```
 /plugin marketplace add cablemp5/squeegee
 /plugin install squeegee@squeegee
 ```
 
-Then restart Claude Code. Installed as a plugin, the command is `/squeegee:squeegee`. Step 2 uses that full form. The later examples use the short form `/squeegee`: if your agent does not find it, type `/squeegee:squeegee` instead.
+Either way, restart your agent afterward. Installed as a plugin, the command is `/squeegee:squeegee`. Step 2 uses that full form. The later examples use the short form `/squeegee`: if your agent does not find it, type `/squeegee:squeegee` instead.
 
 **Using another agent?** Agents that read skills, such as Cursor or Codex, can install it with:
 

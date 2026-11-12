@@ -448,6 +448,51 @@
       "aiBuilt": 1.2
     }
   ],
+  "sprawl": {
+    "limits": [
+      {
+        "measure": "Font families",
+        "limit": 4
+      },
+      {
+        "measure": "Distinct text sizes",
+        "limit": 14
+      },
+      {
+        "measure": "Saturated hues",
+        "limit": 3
+      },
+      {
+        "measure": "Tracked uppercase labels",
+        "limit": 5
+      },
+      {
+        "measure": "Share of text under 12 px",
+        "limit": 0.066
+      }
+    ],
+    "atLeast": [
+      {
+        "atLeast": 2,
+        "reference": 10.8,
+        "aiBuilt": 7
+      },
+      {
+        "atLeast": 3,
+        "reference": 1.9,
+        "aiBuilt": 1.8
+      },
+      {
+        "atLeast": 4,
+        "reference": 0.2,
+        "aiBuilt": 0.4
+      }
+    ],
+    "fiveWeights": {
+      "reference": 19,
+      "aiBuilt": 9
+    }
+  },
   "referenceFacts": [
     {
       "fact": "Two or fewer font families",

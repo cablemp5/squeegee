@@ -2,7 +2,7 @@
 
 Read the first two sections at step 5, before any file changes. Read the whole file again immediately before the first edit in step 6. It covers where a fix belongs, how to prove nothing broke, and the values for each pass group.
 
-The values here are defaults for where the project made no choice. Where the project has a design system, an established scale or a platform convention, that wins. Keep it and say so in the report.
+Rule 5 in SKILL.md applies to every value here. Where the project's own scale or a platform convention won, say so in the report.
 
 ## Take the preservation inventory (step 5, before anything changes)
 
@@ -36,7 +36,7 @@ A theme variable or a shared component variant changes every screen that uses it
 
 A token change is the right fix when the user asked for the whole app. A one-off override in a component file is the wrong fix wherever a token or variant can carry it. A local exception is fine when the element truly is unique.
 
-When a file in the target imports a shared component you may not change, that component keeps its old look. Report it as open. Do not count it as a failure of the run.
+When a file in the target imports a shared component you may not change, that component keeps its old look. Report it as open. The run still passes.
 
 ## Find the styling system
 
@@ -52,7 +52,7 @@ Use the detector's `stack` field, then confirm by reading the files.
 
 Tailwind v4 already limits `hover:` to devices that can hover. Tailwind v3 does not: there, gate hover styles yourself.
 
-If you cannot edit the styling system safely, report and do not edit.
+When you cannot edit the styling system safely, report it and leave the files as they are.
 
 ## Log every change
 
@@ -73,6 +73,8 @@ Do this first so every later fix can reference a token.
 3. **Type.** Load the direction's face once. Two families is typical: 67% of reference pages use two or fewer. Set the scale so each level is clearly larger than the next. The reference median headline is 3.5 times the body size, and the range runs from 1.4 to 5.5.
 4. **Radius.** One base value and derived steps. An inner radius equals the outer radius minus the padding between them.
 5. **Shadow and border.** One hairline. At most two shadow levels, used for things that float.
+
+When sprawl measures are over their limit, group 1 is where they come down. List every distinct text size, weight and text color the target uses. Map each to the nearest step of a scale: nine sizes or fewer, three weights or fewer, ink and muted ink plus one color per state or role. Define the steps as tokens, then replace each literal value with its token. Raise text under 12 px to 12 px or more. Every element keeps its role: a caption stays the smallest step and a headline stays the largest. Run `measure.js` after the group and confirm that each count fell.
 6. **Icons.** Set stroke width and size once, matched to the body text weight.
 7. **Motion tokens.** See group 3. Define them now.
 8. **Dark mode.** Every token gets a dark value. A screen that had dark mode before must still have it, at 4.5:1 or better.
@@ -90,7 +92,7 @@ Work file by file. In each file, do these in order.
 5. **Layout.** Only at `full` and `deep`, and only for sections with a layout tell. Use the layout the user picked. Keep every piece of content and every link.
 6. **Copy.** Interface strings only, and only with approval. Fix residue without asking.
 7. **States.** Every interactive element gets hover, focus-visible, active and disabled styles where that state applies to it. These are styles on existing elements, so they are in scope at every depth. Missing loading, empty and error states are reported at `lite` and `full`. At `deep`, build one only where the code already tracks that state.
-8. **Mechanical law fixes** from `ux-laws.md`: target size, spacing between targets, link styling.
+8. **Mechanical UX law fixes** from `ux-laws.md`: target size, spacing between targets, link styling.
 
 ## Group 3: motion
 

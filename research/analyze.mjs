@@ -95,6 +95,14 @@ export function analyze(good, slop, phone = []) {
     'Words on the page': (r) => r.words, 'Page length (screens)': (r) => r.pageHeights,
   };
   const medians = Object.entries(measures).map(([name, fn]) => ({ measure: name, p10: q(good.map(fn), 0.1), reference: q(good.map(fn), 0.5), p90: q(good.map(fn), 0.9), aiBuilt: q(slop.map(fn), 0.5) }));
+  // Sprawl: how many of five counts sit above the reference 90th percentile on one page.
+  const sprawlMeasures = { 'Font families': (r) => r.familyCount, 'Distinct text sizes': (r) => r.sizeCount, 'Saturated hues': (r) => (r.hues || []).length,
+    'Tracked uppercase labels': (r) => r.trackedCaps, 'Share of text under 12 px': (r) => r.tinyTextShare };
+  const limits = Object.entries(sprawlMeasures).map(([measure, fn]) => ({ measure, fn, limit: q(good.map(fn), 0.9) }));
+  const over = (r) => limits.filter((l) => l.fn(r) > l.limit).length;
+  const sprawl = { limits: limits.map(({ measure, limit }) => ({ measure, limit })),
+    atLeast: [2, 3, 4].map((n) => ({ atLeast: n, reference: +(100 * good.filter((r) => over(r) >= n).length / good.length).toFixed(1), aiBuilt: +(100 * slop.filter((r) => over(r) >= n).length / slop.length).toFixed(1) })),
+    fiveWeights: { reference: pct(good, (r) => (r.weights || []).length >= 5), aiBuilt: pct(slop, (r) => (r.weights || []).length >= 5) } };
   const referenceFacts = Object.entries(FACTS).map(([fact, fn]) => ({ fact, reference: pct(good, fn) }));
   const phoneFacts = { headline: q(phone.map((r) => r.h1 && r.h1.size), 0.5), body: q(phone.map((r) => r.bodySize), 0.5) };
   const groupOf = (r) => (r.surface === 'landing' ? r.category : r.surface === 'web app' ? 'web apps and design systems' : `${r.surface} app product sites`);
@@ -106,7 +114,7 @@ export function analyze(good, slop, phone = []) {
     radius: q(rows.map(commonRadius), 0.5), headline: q(rows.map((r) => r.h1 && r.h1.size), 0.5), weight: q(rows.map((r) => r.h1 && +r.h1.weight), 0.5),
     body: q(rows.map((r) => r.bodySize), 0.5), words: q(rows.map((r) => r.words), 0.5) }));
   return { pages: { reference: good.length, aiBuilt: slop.length, referenceLanding: goodLanding.length, aiBuiltLanding: slopLanding.length },
-    bySurface: tally(good, 'surface'), byBuilder: tally(slop, 'category'), signals, cluster, medians, referenceFacts, phoneFacts, profiles };
+    bySurface: tally(good, 'surface'), byBuilder: tally(slop, 'category'), signals, cluster, medians, sprawl, referenceFacts, phoneFacts, profiles };
 }
 
 function markdown(r, good) {
@@ -143,6 +151,10 @@ function markdown(r, good) {
   add('## Typical values', '', 'The reference columns give the 10th percentile, the median and the 90th percentile across all reference pages.', '');
   add('| Measure | Reference low | Reference median | Reference high | AI-built median |', '|---|---|---|---|---|');
   add(...r.medians.map((m) => `| ${m.measure} | ${m.p10} | ${m.reference} | ${m.p90} | ${m.aiBuilt} |`), '');
+  add('## Sprawl', '', 'Five counts, each with a limit at the 90th percentile of all reference pages. A page is over a limit when its count is higher.', '');
+  add('| Measure | Limit |', '|---|---|', ...r.sprawl.limits.map((l) => `| ${l.measure} | ${l.limit} |`), '');
+  add('| Measures over their limit on one page | All reference pages | All AI-built pages |', '|---|---|---|', ...r.sprawl.atLeast.map((c) => `| ${c.atLeast} or more | ${c.reference}% | ${c.aiBuilt}% |`), '');
+  add(`Sprawl is rare in both groups, so it does not mark a page from an AI site builder. It marks a page that is outside the range of professionally made pages. Five or more font weights appear on ${r.sprawl.fiveWeights.reference}% of reference pages and ${r.sprawl.fiveWeights.aiBuilt}% of AI-built pages. The capture kept only the five most-used weights per page, so higher counts are not measured.`, '');
   add('## Other facts about the reference pages', '');
   add(...r.referenceFacts.map((f) => `- ${f.fact}: ${f.reference}%`));
   add(`- Median headline size at 390 px wide: ${r.phoneFacts.headline} px. Median body size at 390 px wide: ${r.phoneFacts.body} px.`, '');

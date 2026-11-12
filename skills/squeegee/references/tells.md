@@ -2,13 +2,13 @@
 
 Every rule here has an id, the evidence for it, and its fix. The evidence columns give the share of pages showing the signal: 282 reference landing pages against 84 AI-built landing pages, both limited to pages of 250 words or more and 3 screens or longer. The source is [RESULTS.md](https://github.com/cablemp5/squeegee/blob/master/research/RESULTS.md). "Not measured" means the rule rests on judgment or on other skills' experience, and you should weigh it that way.
 
-A tell is a prompt to look, never a verdict. Confirm that it reaches the screen under audit. Then run the removal test.
+A tell is a prompt to look. The verdict comes after you confirm that it reaches a screen you audited and run the removal test.
 
 The research measured rendered pages. The detector reads source text. Their definitions differ, and the detector's are narrower: the research counted any shadcn-style theme variables, and detector rule D01 fires only when the theme still holds a stock primary color. Treat detector rules as heuristics that point at the measured signal, not as the signal itself.
 
 ## Stock defaults (cluster rule)
 
-One of these alone means nothing: 24% of the reference landing pages use Inter. Count how many you confirmed on the screen under audit. Five or more is a finding. Seven or more counts toward Opaque.
+One of these alone means nothing: 24% of the reference landing pages use Inter. Count how many you confirmed on a screen you audited. The tier table in SKILL.md says what the count means.
 
 | Present on one page | Reference | AI-built |
 |---|---|---|
@@ -25,11 +25,35 @@ One of these alone means nothing: 24% of the reference landing pages use Inter. 
 | D04 | Inter | 24% | 50% | Keep it when it suits the product. Otherwise set a face from the direction. |
 | D05 | Headline weight 700 or more | 22% | 67% | The reference median is 500. Carry emphasis with size unless the direction calls for a heavy headline. |
 | D06 | Centered headline | 40% | 50% | Weak evidence. Align to the layout's grid when the content is not symmetric. |
-| D07 | Body text under 16 px | 35% | 63% | Body text at 16 px or more. Dense app tables may use 13 or 14 px. |
+| D07 | Body text under 16 px | 35% | 63% | Body text at 16 px or more. Dense app tables may use 13 or 14 px. The body size is the most-used text size on the screen (`bodySize` in `measure.js`), not the value on the `body` rule. |
 | D08 | Small pill badge above the headline | 6% | 35% | See T02. |
 | D09 | No reduced-motion rule | 32% | 39% | Weak evidence, and still worth fixing: add one reduced-motion rule in the theme. |
 
-The detector reads D01 to D04 and D09 from the whole project and says where it saw each one. A default seen in a file that the screen under audit does not use does not count.
+The detector reads D01 to D04 and D09 from the whole project and says where it saw each one. A default counts only when a screen you audited uses the file it was seen in.
+
+## Sprawl measures (cluster rule)
+
+Sprawl is what an interface looks like when it grew one request at a time: every new element got its own size, weight, color and label, and nothing was merged afterward. Custom art does not rule it out. `scripts/measure.js` returns each count for the screen it runs on.
+
+Each limit is the 90th percentile of the 565 reference pages, so "over" means outside the range of 90% of professionally made pages. Two or more are over on 10.8% of reference pages. Three or more are over on 1.9% of reference pages and 1.8% of AI-built pages, which is where the tier table in SKILL.md sets its anchor. Sprawl is rare in both groups, so it does not show that a builder made the page. It shows that no system holds the page together.
+
+| Id | Measure | Limit | Fix at the source |
+|---|---|---|---|
+| S01 | Font families in use | more than 4 | One face for text and one for display. A monospace face only where the content is code or tabular data. |
+| S02 | Distinct text sizes | more than 14 | Map every size to a scale of nine steps or fewer, as tokens. The reference median is 9. |
+| S03 | Saturated hues | more than 3 | One accent, plus hues that mark a state or a category. The reference median is 1. |
+| S04 | Tracked uppercase labels | more than 5 | See J14. Keep the few that name a group. Fold the rest into their heading or set them in sentence case. |
+| S05 | Share of text under 12 px | more than 6.6% | Raise it to 12 px or more. Text that small is usually a label that the heading already covers. |
+
+These three have limits set by judgment, because the research did not record the full counts. Each one over its limit is a judged tell and counts with the tells, not with the sprawl measures.
+
+| Id | Measure | Limit | Fix at the source |
+|---|---|---|---|
+| S06 | Font weights in use | more than 5 | Three weights or fewer: text, emphasis, display. 81% of reference pages use four or fewer. |
+| S07 | Text colors | more than 8 | Ink, muted ink, and one color per state or role, as tokens. |
+| S08 | Heading styles | more than one per heading level, plus one | One style per level. Two headings of one level that differ in face, size or weight need a reason. |
+
+Sprawl fixes change values and leave content as it is. A caption stays a caption and every label keeps its text unless the user approves a cut.
 
 ## Detector tells and defects
 
@@ -47,14 +71,15 @@ The detector reads D01 to D04 and D09 from the whole project and says where it s
 | X02 | Defect | Focus outline removed with no replacement | not measured | not measured | Add a visible `focus-visible` style. Check the component's own styles first: the replacement may live in another file. |
 | X03 | Defect | Arbitrary spacing values (`mt-[13px]`) in 3 or more places | not measured | not measured | Use the project's spacing scale. Leave a value that aligns something to a fixed asset. |
 | X04 | Defect | Zoom disabled in the viewport tag | not measured | not measured | Remove it. |
-| L01 | Defect | Tap target under 24 by 24 px | see `ux-laws.md` | | Enlarge the hit area. |
+| X05 | Defect | A face named first in a font stack that nothing in the project loads | not measured | not measured | Load it once in the theme with `@font-face` or a font link, or name a face every visitor has. Confirm with `facesNotLoaded` in `measure.js`: the face renders only on machines that have it installed, so the screen you see may not be the screen a visitor sees. |
+| L01 | Defect | Tap target under 24 by 24 px | see Fitts's Law in `ux-laws.md` | | Enlarge the hit area. |
 | R01 | Report only | Placeholder names or text (Jane Doe, Acme, Lorem ipsum) | not measured | not measured | Report. The owner confirms or supplies real content. |
-| R02 | Report only | Proof claim to check ("Trusted by 10,000+ teams") | not measured | not measured | Report. Ask for the source. Never adjust the number. |
-| H01 | House rule | Em dash in interface copy | 60% | 70% | Not an AI tell by this evidence. Rewrite with approval. |
+| R02 | Report only | Proof claim to check ("Trusted by 10,000+ teams") | not measured | not measured | Report. Ask for the source. The number stays as written. |
+| H01 | House rule | Em dash in interface copy | 60% | 70% | Not an AI tell by this evidence. Rewrite with approval. The detector flags a dash between words only. A lone dash that stands for an empty value is data. |
 
 ## Judged tells
 
-The detector has no rule for these. The research found most of them about as often on reference pages as on AI-built ones, so presence proves nothing. Ask one question: is this the stock version, or did someone design it? The stock version uses default values, repeats without variation, and would fit any product.
+The detector has no line rule for these. Its `styles` field counts font sizes, weights, color values, uppercase rules and gradients in plain CSS, which shows where the code holds the most variation. The research found most of them about as often on reference pages as on AI-built ones, so presence proves nothing. Ask one question: is this the stock version, or did someone design it? The stock version uses default values, repeats without variation, and would fit any product.
 
 Color and effects:
 
@@ -76,14 +101,15 @@ Layout:
 | J09 | Cards inside cards | 23% | 35% | A bordered box inside a bordered box. | Remove the inner border. Group with spacing. |
 | J10 | Every section the same centered template | not measured | not measured | Heading, subhead, grid, same padding, repeated. | Vary alignment and density by what each section says. |
 | J11 | Colored left stripe or colored border on cards | 1% | 6% | A stripe as decoration. | Keep only where it marks a state. Then add an icon and a label so color is not the only signal. |
-| J12 | Fake terminal or browser window | not measured | not measured | A drawn window around invented content. | Report it and ask for a real capture of the product. Never remove it: it is content, and removal is outside Squeegee's scope. |
+| J12 | Fake terminal or browser window | not measured | not measured | A drawn window around invented content. | Report it and ask for a real capture of the product. It stays in place: it is content, and removal is outside Squeegee's scope. |
+| J25 | Ragged alignment | not measured | not measured | Text blocks in one section start at many different left edges, and neighbors miss each other by a few pixels. `leftEdges` in `measure.js` counts the edges on the screen. | Align each section to one grid. Blocks that belong together share an edge. |
 
 Type and components:
 
 | Id | Tell | The stock version | Fix |
 |---|---|---|---|
 | J13 | One italic serif word in a sans headline | An accent word in a second face. | One face for the headline. |
-| J14 | Tiny uppercase tracked labels | A label above every section heading. | Fold it into the heading. 24% of reference landing pages use at least one against 51% of AI-built ones, so a few are fine and one above every section is the stock version. |
+| J14 | Tiny uppercase tracked labels (eyebrows, kickers) | A label above every section heading, card and button. | Fold it into the heading. 24% of reference landing pages use at least one against 51% of AI-built ones, and 90% of reference pages have five or fewer, so a few are fine. More than five is sprawl measure S04. |
 | J15 | Icon in a tinted rounded square | Every feature has one. | Icon alone, or none. |
 | J16 | Sparkle icon for anything involving AI | Decoration. | A label that says what the feature does. |
 | J17 | Section numbering (`01 / 04`) | Decoration. | Remove unless the order matters to the reader. |
@@ -99,19 +125,20 @@ Copy (interface strings only):
 | J22 | Headline that fits any product | not measured | not measured | Name what this product does and for whom. |
 | J23 | "Learn more", "Get started", "Explore" as the only button labels | not measured | not measured | Say what happens when it is pressed. |
 | J24 | Residue: `{{tokens}}`, "Certainly!", markdown on the page | not measured | not measured | Remove. This is a defect. |
+| J26 | Stacked text layers: a kicker, a heading, a subhead and a description on one item, each restating the last | not measured | not measured | List the lines that repeat another line and propose which to cut or merge. A cut is a copy change, so it needs approval. Without approval, set the repeated layers quieter and report them. |
 
 Copy changes need the user's approval. A climbing shop may say "harness". A studio that is really named Summit keeps its name.
 
 ## Dashboard tells
 
-Every metric, chart, column and control on a dashboard is content. Reorder and reweight. Never delete one, and never add one.
+Every metric, chart, column and control on a dashboard is content. Reorder and reweight them. The dashboard ends with the same set it started with.
 
 | Id | Tell | Fix |
 |---|---|---|
 | A01 | A grid of 8 equal KPI cards | Keep all 8. Give one or two the lead by size and position, and set the rest smaller. |
 | A02 | First screen holds only large metric cards while a chart and a table sit below | Tighten the cards so the existing chart and the start of the existing table rise above the fold. |
 | A03 | Marketing spacing: card padding of 32 to 48 px | 16 to 20 px. Table rows of 40 to 48 px. |
-| A04 | Decorative sparklines, gauges and progress rings | Report any chart nobody could read a value from. Group, order and set it quieter. Never remove it: removal is outside Squeegee's scope. |
+| A04 | Decorative sparklines, gauges and progress rings | Report any chart nobody could read a value from. Group, order and set it quieter. It stays: removal is outside Squeegee's scope. |
 | A05 | 3D charts, a pie with more than 3 slices, a bright hue per series with no meaning | A flat chart. One hue with steps plus one highlight where series are ordered. Distinct hues are right for unordered categories, and a pie or donut is fine for 2 or 3 parts of a whole. |
 | A06 | Uppercase table headers, status as large colored pills | Sentence case. A 6 to 8 px dot plus a word. |
 | A07 | No sticky header on a table longer than 15 rows | Make the header sticky. Use tabular numerals. |
@@ -150,7 +177,7 @@ The research holds no native app screens. Its mobile and desktop rows are the pr
 
 ## Not tells
 
-Do not flag these. Each appeared on a large share of the reference pages.
+These pass. Each appeared on a large share of the reference pages.
 
 - A dark page (27% of reference landing pages) or a pure white page (48% of all reference pages).
 - Tailwind (36% of reference landing pages) or shadcn components whose theme has been customized.

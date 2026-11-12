@@ -1,77 +1,152 @@
 # Reports
 
-Squeegee writes two reports: the audit at step 4 and the final report at step 9. Both follow the writing rules below. A reader should be able to act on either without reading the code.
+Squeegee writes two reports: the audit at step 4 and the final report at step 9. The reader is the product's owner. They have not read the code, this skill or its rule ids. Each report lets them act without opening any of the three.
 
 ## Writing rules
 
-1. Plain words. "Use", not "utilize". "Help", not "facilitate".
-2. Active voice with a named actor. "The detector found 4 candidates", not "4 candidates were found".
-3. Numbers instead of adjectives. "14 findings", "contrast 2.9:1", never "many" or "poor".
-4. Say what a thing does, not how it feels. "The headline is 72 px at weight 800 and centered", not "the hero feels heavy".
-5. One idea per sentence. If a reader would have to backtrack, split it.
-6. Sentence case for headings.
-7. No em dashes. Use a period or a comma.
-8. No bold label followed by a colon that restates the line. A bold lead-in that names an item and is followed by new detail is fine.
-9. No decorative emoji. No praise, no apology, no closing pleasantries.
-10. No figure of speech where a literal phrase exists.
-11. Every finding carries a `file:line`. Every pass carries the evidence that it passed.
-12. Uncertainty is stated once, where it applies: "not run", "unverified", "self-graded".
+1. Lead with the verdict and the three largest problems. Detail follows.
+2. Give every number its comparison. "16 text sizes. 90% of professionally made pages use 14 or fewer."
+3. Describe what you measured, in its units. "The headline is 72 px at weight 800 and centered."
+4. Name a rule beside its id the first time it appears: "S02, distinct text sizes".
+5. Every finding carries a `file:line` and a reason (see "Grounding a finding"). Every pass carries the evidence that it passed.
+6. State uncertainty once, where it applies: "not run", "unverified", "self-graded".
+7. Plain words, active voice with a named actor, one idea per sentence, sentence case headings, periods and commas in place of em dashes, literal phrases. Leave out emoji, praise, apology and sign-offs.
+
+## Grounding a finding
+
+Every finding has three parts.
+
+**Seen.** The observation with its value, the screen and width it was seen at, and the `file:line` that produces it.
+
+**Why it counts.** One or two sentences built from the rule's own evidence. Use every kind that applies:
+
+- A measured comparison from `tells.md`: the share of reference pages against AI-built pages, or the reference range. "Gradient text appears on 16% of reference landing pages and 32% of AI-built ones."
+- A UX law from `ux-laws.md`: its name, its plain-words statement, then what that costs this user on this screen. "Fitts's Law: a target takes longer to hit as it gets smaller. At 18 px tall, this link is the main route to the games list and the hardest control on the screen to press."
+- A threshold: "Contrast is 2.9:1. Text needs 4.5:1."
+
+When the evidence is weak, say so in the same breath: "Emoji in a heading appears on 11% of reference pages and 12% of AI-built ones, so it is no tell. It is listed because this one is decoration." A reason states an effect on the user or a distance from a measured range. Replace a verdict such as "looks generic" or "feels heavy" with the observation that led to it.
+
+**Fix.** The change, and the place in the code where it is made once.
 
 ## Audit format
 
 ```markdown
 # Squeegee audit: <target>
 
-**Tier: Grimy (heavy slop).** <One sentence of reason.>
+**Grimy (heavy slop).** <Two sentences a stranger would understand: what the screens are, and the main reason for the rating in numbers.>
 
-Stock defaults: 6 of 9. Findings: 3 defects, 7 tells, 2 report only, 1 kept by decision.
+## In short
 
-## The read
-<The four lines written before the detector output: what the screen is for, what works and stays, what reads as generated, what is broken.>
+- **Rating:** Grimy, set by sprawl: 4 of 5 sprawl measures are over their limit.
+- **Largest problems:** 1. Text comes in 16 sizes and 11 weights. 2. 38 small uppercase labels sit above headings, cards and buttons. 3. The display font is never loaded, so headings change face on Mac and phones.
+- **Works and stays:** <the product-specific parts: art, layout, color that passed the removal test>
+- **Screens:** 3 of 3 audited (Home, Shop, Games).
+- **Counts:** 3 defects, 6 tells, 2 of 9 stock defaults, 4 of 5 sprawl measures over, 5 of 30 UX laws failed, 1 report only.
 
-## Findings
+## Broken
 
-| Id | Tier | Law | Where | What | Fix |
+Defects. Squeegee always fixes these.
+
+### 1. "Browse all games" is 18 px tall (L01, small tap target)
+- Seen: 129 by 18 px on Home at 1440 px and 390 px. `client/index.html:212`.
+- Why it counts: Fitts's Law: a target takes longer to hit as it gets smaller. The floor is 24 px, and 44 px on touch screens. This link is the main route to the games list.
+- Fix: pad the hit area to 44 px tall in `.browse-link`. The text keeps its size.
+
+## Reads as generated
+
+Tells, the stock-default cluster and sprawl. Largest first.
+
+### 2. Text comes in 16 sizes (S02, distinct text sizes)
+- Seen: 11, 12, 13, 14, 15, 16, 17, 19, 28, 30, 37, 42, 46, 49, 72 and 86 px on Home at 1440 px. The stylesheets hold 111 distinct `font-size` values.
+- Why it counts: 90% of professionally made pages use 14 sizes or fewer, and the median is 9. Law of Similarity: items that look alike are read as the same kind of thing. Sizes 1 px apart make the same kind of label look like two kinds.
+- Fix: map every size to a nine-step scale of tokens in `client/src/styles/main.css`, then replace each literal with its token.
+
+## UX law findings
+
+Failed question UX laws that are not already listed above. They leave the rating unchanged.
+
+### 7. Each game card carries four text layers (Cognitive Load)
+- Seen: a category label, a title, a tagline and a description on each of 6 cards on Home.
+- Why it counts: Cognitive Load: every element the user must read spends limited effort. The label repeats the section heading, so 6 of 24 lines add nothing.
+- Fix: needs your approval, because it removes copy. Proposed: drop the category label inside its own section.
+
+## Evidence
+
+### Stock defaults: 2 of 9
+
+| Id | Stock default | Result | Seen |
+|---|---|---|---|
+| D04 | Inter | present | Body text on every screen |
+| D07 | Body text under 16 px | present | Most-used size is 13 px |
+| D01 | shadcn theme variables | absent | No theme variables in the project |
+
+<All nine, one row each.>
+
+### Sprawl measures: 4 of 5 over
+
+| Id | Measure | Home | Shop | Limit | Over |
 |---|---|---|---|---|---|
-| X02 | Defect | Similarity | `components/ui/button.tsx:14` | Focus outline removed, no replacement | Add a focus-visible ring in the button variant |
-| D01 | Default | | `app/globals.css:8` | shadcn theme holds stock values | Replace in group 1 |
+| S02 | Distinct text sizes | 16 | 15 | 14 | yes |
 
-Order: defects, tells, the default cluster, judged tells. Within a tier, group by law.
+<S01 to S08 from `measure.js` at 1440 px, one row each, one column per screen. S06 to S08 have limits set by judgment. Each over counts as a judged tell.>
 
-## Stock defaults present
-<The list from the detector, each confirmed or rejected.>
+### UX laws: 30 checked
+
+| UX law | Result | Seen |
+|---|---|---|
+| Fitts's Law | Fail | 1 control under 24 px, 9 under 44 px at 390 px. Finding 1. |
+| Goal-Gradient Effect | Not applicable | No multi-step flow on these screens |
+| Doherty Threshold | Not run | The browser tool cannot time a response |
+
+<All 30 rows, in the order of `ux-laws.md`. One table for screens that share a layout.>
 
 ## Report only
-<Proof claims with no source, placeholder content, missing terms or privacy pages, missing controls. One line each with file:line. State that squeegee will not write these.>
+<Proof claims with no source, placeholder content, missing terms or privacy pages, missing controls. One line each with file:line. Squeegee reports these and the owner supplies them.>
 
 ## Kept by decision
 <Entries from .squeegee.md that matched a finding.>
 
 ## Left alone
-<What you looked at and chose not to change, with the reason. At least two items.>
+<What you looked at and chose to keep, with the reason. At least two items.>
 
 ## Coverage
 
 | Check | Result |
 |---|---|
-| Detector | passed, 16 candidate rules and 9 default checks, 41 files |
+| Detector | passed, 41 files, 12 candidates, 2 of 9 stock defaults |
+| Screens | 3 of 3 audited |
 | Rendered look, 1440 px and 390 px | passed |
+| Images saved | passed, 12 files in `.squeegee/shots/` |
 | Dark mode | not run: the page has no dark mode |
 | 320 px overflow | failed: `Pricing` scrolls sideways |
-| Law checks | 5 run, 1 not run (Fitts: no computed sizes without a browser tool) |
+| Measure script | passed at 1440 px and 390 px on 3 screens |
+| Contrast (J06) | failed: 12% of text under 4.5:1, lowest 2.9:1 |
+| Faces loaded (X05) | failed: Rajdhani is named and never loaded |
+| Target sizes (Fitts's Law) | failed: 1 control under 24 px, 9 under 44 px at 390 px |
+| Focus visible (X02) | not run: the browser tool cannot send key presses |
+| Hover and active states (J19) | passed |
+| UX laws | 30 answered: 22 pass, 5 fail, 2 not applicable, 1 not run |
 
 ## Shared definitions this fix would touch
 <Each token or variant, with the files that use it. Mark any outside the target.>
 
 ## Proposed depth
 <lite, full or deep, with one sentence of reason.>
+
+## What a run would do
+<Two or three lines: how many directions it would show, which pass groups it would run, and the largest visible changes.>
+
+## Not checked
+Squeegee looks for the generated look and for the defects in its rules. It leaves the product's content, features and flows to the owner. <Add any screen or state that was out of reach, such as screens behind a sign-in.>
 ```
 
-How the audit ends depends on the mode:
+The audit is complete when:
 
-- `audit`: end after the proposed depth. Ask nothing.
-- Default mode: follow the audit with the directions from step 5. Unless `--no-shots`, link `.squeegee/directions.html`. Then ask once for approval, a depth and a direction.
-- `fix`: do not ask for approval of the findings. Continue to step 5.
+- every finding has Seen, Why it counts and Fix
+- the three evidence tables hold 9, 8 and 30 rows
+- every coverage row above is present with a result. A check you skipped reads "not run" with the reason.
+
+In default mode the directions from step 5 follow the audit. Unless `--no-shots`, link `.squeegee/directions.html`. Then ask once for approval, a depth and a direction.
 
 ## Final report format
 
@@ -80,7 +155,7 @@ How the audit ends depends on the mode:
 
 **Before: Grimy (heavy slop). After: Spotless (no slop).** <If the blind recheck ran, give its tier too. If it did not, write "self-graded".>
 
-Findings: 13 before, 1 after. Stock defaults: 6 of 9 before, 1 of 9 after.
+Findings: 13 before, 1 after. Stock defaults: 6 of 9 before, 1 of 9 after. Sprawl: 4 of 5 over before, 0 after.
 
 ## What changed
 <Three to six lines, each a result the user can see. "Body text is 16 px in Söhne, up from 14 px in the system font.">
@@ -92,10 +167,10 @@ Findings: 13 before, 1 after. Stock defaults: 6 of 9 before, 1 of 9 after.
 | R02 | "Trusted by 10,000+ teams" in `Hero.tsx:22` | Report only. Needs a source from you. |
 | J10 | Sections share one template | Needs `full` depth. This run was `lite`. |
 
-Each row gives one of four reasons: kept by your decision, needs a deeper depth, report only, or needs your approval. In `fix` mode, changes that need approval (such as H01 and copy changes) are listed here and not applied.
+Each row gives one of four reasons: kept by your decision, needs a deeper depth, report only, or needs your approval. In `fix` mode, changes that need approval (such as H01 and copy changes) are listed here and left unapplied.
 
 ## Left alone
-<What you chose not to change, and why.>
+<What you chose to keep, and why.>
 
 ## Checks
 
@@ -107,6 +182,7 @@ Each row gives one of four reasons: kept by your decision, needs a deeper depth,
 | Tests | not run | The project has no test script |
 | Dark mode parity | passed | Both modes captured before and after |
 | Interactions exercised | passed | 3 links followed, 1 form submitted, 1 dialog opened and closed |
+| Scored UX laws, second pass | passed | All 8 rerun on the finished screen |
 | Blind recheck | passed | Fresh subagent rated Spotless |
 
 ## Files changed
@@ -116,7 +192,7 @@ Each row gives one of four reasons: kept by your decision, needs a deeper depth,
 Before and after: `.squeegee/compare.html` (omit this section with `--no-shots`)
 ```
 
-Never write "passed" for a check that did not run. Never call a visual result verified without a rendered look.
+A result of "passed" means the check ran and you can name its evidence. A visual result is "verified" only after a rendered look.
 
 ## The decisions file
 
@@ -141,5 +217,5 @@ Rules:
 
 - Every kept entry names the rule id, where it applies (a file, a component or everywhere), and a reason of at least a few words.
 - A kept entry silences that rule only in the scope it names.
-- More than 5 kept tells is itself reported in the audit. The file exists to record deliberate choices, and a long list means the skill has been switched off by hand.
-- To revise a decision, the user edits or deletes the line. Squeegee never removes a kept entry on its own.
+- More than 5 kept tells is itself reported in the audit. The file records deliberate choices, and a long list means the skill has been switched off by hand.
+- The user revises a decision by editing or deleting the line. Kept entries stay until the user removes them.

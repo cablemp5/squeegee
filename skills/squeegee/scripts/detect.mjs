@@ -27,6 +27,16 @@ const SHADCN_STOCK = [/--primary:\s*222\.2 47\.4% 11\.2%/, /--primary:\s*240 5\.
 
 // The opening tag that starts on line i, joined across up to 8 lines.
 const tagAt = (lines, i) => { let t = lines[i]; for (let j = i + 1; j < Math.min(lines.length, i + 8) && !/(?<!=)>/.test(t.slice(t.search(/<[a-zA-Z]/))); j++) t += ' ' + lines[j]; return t; };
+// The declarations of plain CSS rules that start on this line and style h1 itself: "h1", ".hero h1", "h1.title", not "h1 span".
+const h1Block = (l, lines, i) => {
+  if (!/\bh1\b/.test(l)) return '';
+  let out = '';
+  for (const m of lines.slice(i, i + 40).join('\n').matchAll(/(?<=^|[};])([^{};]*)\{([^}]*)\}/g)) {
+    if (m.index >= l.length) break;
+    if (m[1].split(',').some((s) => /(^|[\s>+~])h1(?![\w-])[^\s>+~]*$/.test(s.trim()))) out += m[2];
+  }
+  return out;
+};
 
 // tier: defect (always fix) | tell (fix unless kept) | default (cluster only) | report (never generate) | house (fix with approval)
 export const RULES = [
@@ -65,6 +75,8 @@ export const RULES = [
   { id: 'X04', tier: 'defect', name: 'zoom disabled', law: 'Postel',
     test: (l) => /user-scalable\s*=\s*(no|0)\b|maximum-scale\s*=\s*1(\.0+)?(?![.\d])/.test(l),
     fix: 'Remove it from the viewport meta tag.' },
+  { id: 'X05', tier: 'defect', name: 'font named but never loaded', law: null, special: true,
+    fix: 'Load the face once in the theme with @font-face or a font link, or name a face every visitor has.' },
   { id: 'L01', tier: 'defect', name: 'small tap target', law: 'Fitts',
     test: (l, lines, i) => { const t = tagAt(lines, i); return new RegExp(`<(button|a)\\b(?:=>|[^>])*?${CLS}\\b(h-[3-5]|size-[3-5])\\b`).test(t) && !/\bp[xy]?-[2-9]\b|\bp[xy]?-\d\d\b|\bmin-[hw]-/.test(t); },
     fix: 'Give the control a hit area of at least 24 by 24 px, 44 by 44 px on touch screens.' },
@@ -78,20 +90,34 @@ export const RULES = [
     test: (l) => /\b(trusted|loved|used|chosen) by (over |more than )?[\d,.]+[kKmM]?\+?/i.test(l),
     fix: 'Report it. Ask the owner for the source. Never invent or adjust a number.' },
   { id: 'H01', tier: 'house', name: 'em dash in interface copy', law: null,
-    test: (l) => /—/.test(l) && !/^\s*(\/\/|\*|\/\*|\{\/\*|<!--)/.test(l),
+    // A dash between words only: a lone "—" is a placeholder for an empty value, which is data.
+    test: (l) => /[\p{L}\p{N}.,!?)]\s?—\s?[\p{L}\p{N}(]/u.test(l) && !/^\s*(\/\/|\*|\/\*|\{\/\*|<!--)/.test(l),
     fix: 'House rule, not an evidence-based tell. Rewrite with a period or comma after approval.' },
   // Stock defaults found by line. They feed the cluster count and are never reported alone.
   { id: 'D05', tier: 'default', name: 'headline weight 700 or more', law: null,
-    test: (l, lines, i) => /<h1\b/.test(l) && /\bfont-(bold|extrabold|black)\b/.test(tagAt(lines, i)) },
+    test: (l, lines, i) => (/<h1\b/.test(l) && /\bfont-(bold|extrabold|black)\b/.test(tagAt(lines, i))) || /font-weight:\s*(bold|[7-9]\d\d)\b/.test(h1Block(l, lines, i)) },
   { id: 'D06', tier: 'default', name: 'centered headline', law: null,
-    test: (l, lines, i) => /<h1\b/.test(l) && /\btext-center\b/.test(tagAt(lines, i)) },
+    test: (l, lines, i) => (/<h1\b/.test(l) && /\btext-center\b/.test(tagAt(lines, i))) || /text-align:\s*center\b/.test(h1Block(l, lines, i)) },
   { id: 'D07', tier: 'default', name: 'body text under 16 px', law: null,
     test: (l, lines, i) => (/<body\b/.test(l) && /\btext-(xs|sm)\b/.test(tagAt(lines, i))) || (/\b(html|body)\s*\{/.test(l) && /\b(html|body)\s*\{[^}]*font-size:\s*(1[0-5]px|0\.[0-9]+rem)/.test(lines.slice(i, i + 40).join('\n'))) },
 ];
 const rule = (id) => RULES.find((r) => r.id === id);
 // A font-family whose first family is not a system or generic one. A system-only stack stays eligible for D03.
 const FAMILY_CHOSEN = /font-family\s*:\s*(?!["']?(ui-|system-ui|-apple-system|blinkmacsystemfont|segoe ui|sans-serif|serif|monospace|cursive|fantasy|arial|helvetica|inherit|initial|unset|revert|var\(|theme\())["']?[a-z]/i;
-const CHECK = /<(Check|CheckCircle2?|CircleCheck|CheckIcon)\b|[✓✔✅]/;
+// Faces that need no loading: generic names and the faces operating systems ship in their default stacks.
+const SAFE_FACE = /^(serif|sans-serif|monospace|cursive|fantasy|emoji|math|system-ui|ui-[a-z-]+|-apple-system|blinkmacsystemfont|inherit|initial|unset|revert|arial|helvetica( neue)?|times( new roman)?|georgia|courier( new)?|verdana|tahoma|trebuchet ms|impact|palatino|segoe ui( [a-z]+)*|roboto|sf pro( [a-z]+)*|sf mono|sfmono-regular|menlo|monaco|consolas|lucida [a-z ]+|liberation [a-z]+|dejavu [a-z ]+|ubuntu( mono)?|cantarell|oxygen|fira sans|droid sans|noto [a-z ]+|apple color emoji)$/i;
+// A font-family declaration, or a custom property with "font" in its name whose value is a stack ending in a generic family.
+// The stack test keeps --font-display: swap and --font-weight: bold from being read as faces.
+const FACE_DECL = /(?:font-family\s*:\s*([^;}{\n]+)|--[\w-]*font[\w-]*\s*:\s*([^;}{\n]+,\s*(?:serif|sans-serif|monospace|system-ui|ui-[a-z-]+|cursive|fantasy))\s*(?=[;}\n]|$))/g;
+const norm = (t) => t.trim().replace(/^["']|["']$/g, '').toLowerCase().replace(/[+_-]/g, ' ');
+// The family names a file loads: @font-face rules, Google or Bunny font links, @fontsource packages, next/font/google imports.
+const loadedFaces = (text) => [
+  ...[...text.matchAll(/@font-face\s*\{[^}]*?font-family\s*:\s*([^;}]+)/g)].map((m) => m[1]),
+  ...[...text.matchAll(/fonts\.(?:googleapis|bunny)[^"'\s)]*/g)].flatMap((m) => [...m[0].matchAll(/family=([^&:"']+)/g)].flatMap((f) => f[1].replace(/%20/g, ' ').split('|'))),
+  ...[...text.matchAll(/@fontsource(?:-variable)?\/([\w-]+)/g)].map((m) => m[1]),
+  ...[...text.matchAll(/import\s*\{([^}]*)\}\s*from\s*['"]next\/font\/google['"]/g)].flatMap((m) => m[1].split(',').map((n) => n.trim().split(/\s+as\s+/)[0])),
+].map(norm);
+const CHECK =/<(Check|CheckCircle2?|CircleCheck|CheckIcon)\b|[✓✔✅]/;
 
 function walk(dir, out, skipped) {
   for (const name of readdirSync(dir)) {
@@ -129,7 +155,9 @@ export function scan(target) {
   const candidates = [];
   const hits = {};
   const p = { fontChosen: false, inter: false, lucideFiles: 0, strokeFiles: 0, globalStroke: false, shadcnStock: null, shadcnVars: false,
-    motion: false, reducedMotion: false, cssInJs: false, tailwindV4: false, modules: false };
+    motion: false, reducedMotion: false, cssInJs: false, tailwindV4: false, modules: false, loaded: new Set(), unknownLoader: false };
+  const faces = new Map();   // first family of each font declaration in the target, with where it was first seen
+  const st = { files: 0, sizes: new Set(), weights: new Set(), families: new Set(), colors: new Set(), uppercase: 0, gradients: 0 };
   const add = (r, file, line, match) => {
     const c = { id: r.id, tier: r.tier, name: r.name, law: r.law || null, file: rel(file), line, match: match.trim().slice(0, 140), fix: r.fix || null };
     if (r.min) (hits[r.id] ||= []).push(c); else candidates.push(c);
@@ -153,11 +181,27 @@ export function scan(target) {
     if (/from ['"](styled-components|@emotion\/|@stitches\/|@vanilla-extract\/)/.test(text)) p.cssInJs = true;
     if (css && /@import\s+["']tailwindcss["']|@theme\b/.test(text)) p.tailwindV4 = true;
     if (/\.module\.s?css$/.test(path)) p.modules = true;
+    for (const f of loadedFaces(text)) p.loaded.add(f);
+    if (/use\.typekit\.net|next\/font\/local|fonts\.adobe/.test(text)) p.unknownLoader = true;   // loads faces under names this scan cannot read
 
     // Line rules read markup and stylesheets inside the target only.
     if (!targetSet.has(path)) continue;
     if (!markup && !css) continue;
     const file = { text };
+    for (const m of text.matchAll(FACE_DECL)) {
+      const face = (m[1] || m[2]).split(',')[0].trim().replace(/\s*!important$/, '').replace(/^["']|["']$/g, '');
+      if (!/^[A-Za-z][\w .-]*$/.test(face) || SAFE_FACE.test(face)) continue;   // skips var(), theme() and system faces
+      if (css) st.families.add(face.toLowerCase());
+      if (!faces.has(face.toLowerCase())) faces.set(face.toLowerCase(), { face, path, line: text.slice(0, m.index).split('\n').length, match: m[0] });
+    }
+    if (css) {   // how many distinct values a plain stylesheet holds: where to consolidate, not a verdict
+      st.files++;
+      for (const m of text.matchAll(/font-size:\s*([^;}]+)/g)) st.sizes.add(m[1].trim());
+      for (const m of text.matchAll(/font-weight:\s*([^;}]+)/g)) st.weights.add(m[1].trim());
+      for (const m of text.matchAll(/#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab)\([^)]*\)/gi)) st.colors.add(m[0].toLowerCase().replace(/\s+/g, ''));
+      st.uppercase += (text.match(/text-transform:\s*uppercase/g) || []).length;
+      st.gradients += (text.match(/\b(linear|radial|conic)-gradient\(/g) || []).length;
+    }
     for (const r of RULES) {
       if (r.special) continue;
       lines.forEach((l, i) => { if (l.length < 2000 && r.test(l, lines, i, file)) add(r, path, i + 1, l); });
@@ -174,6 +218,8 @@ export function scan(target) {
       }
     });
   }
+  // X05: a face the styles name first that nothing in the project loads. It renders only where it is installed.
+  if (!p.unknownLoader) for (const f of faces.values()) if (!p.loaded.has(norm(f.face))) add(rule('X05'), f.path, f.line, f.match);
   for (const r of RULES) if (r.min && (hits[r.id] || []).length >= r.min) candidates.push({ ...hits[r.id][0], count: hits[r.id].length, alsoAt: hits[r.id].slice(1, 6).map((c) => `${c.file}:${c.line}`) });
 
   const has = (...names) => names.some((n) => existsSync(join(root, n)));
@@ -204,7 +250,8 @@ export function scan(target) {
   const order = { defect: 0, tell: 1, report: 2, house: 3 };
   shown.sort((a, b) => order[a.tier] - order[b.tier] || a.file.localeCompare(b.file) || a.line - b.line);
   const counts = shown.reduce((m, c) => (m[c.tier] = (m[c.tier] || 0) + 1, m), {});
-  return { projectRoot: root.replace(/\\/g, '/'), target: rel(abs) || '.', files: targetFiles.length, projectFiles: projectFiles.length, skipped, stack, defaults,
+  const styles = st.files ? { cssFiles: st.files, fontFamilies: st.families.size, fontSizes: st.sizes.size, fontWeights: st.weights.size, colors: st.colors.size, uppercase: st.uppercase, gradients: st.gradients } : null;
+  return { projectRoot: root.replace(/\\/g, '/'), target: rel(abs) || '.', files: targetFiles.length, projectFiles: projectFiles.length, skipped, stack, defaults, styles,
     cluster: { present: defaults.length, of: 9, flagged: defaults.length >= 5, opaque: defaults.length >= 7 }, counts, candidates: shown };
 }
 
@@ -222,8 +269,9 @@ function main() {
   console.log(`stack: tailwind ${r.stack.tailwind || 'none'}, shadcn ${r.stack.shadcn ? 'yes' : 'no'}, css-in-js ${r.stack.cssInJs ? 'yes' : 'no'}${r.stack.native ? ', ' + r.stack.native : ''}`);
   console.log(`stock defaults: ${r.cluster.present} of 9${r.cluster.flagged ? ' (flagged: 5 or more)' : ''}`);
   for (const d of r.defaults) console.log(`  ${d.id}  ${d.name}  (${d.where})`);
+  if (r.styles) console.log(`plain CSS in ${r.styles.cssFiles} files: ${r.styles.fontFamilies} chosen faces, ${r.styles.fontSizes} font sizes, ${r.styles.fontWeights} weights, ${r.styles.colors} color values, ${r.styles.uppercase} uppercase rules, ${r.styles.gradients} gradients`);
   console.log(`candidates: ${Object.entries(r.counts).map(([k, v]) => `${v} ${k}`).join(', ') || 'none'}`);
-  for (const c of r.candidates) console.log(`  ${c.id}  ${c.tier.padEnd(6)} ${c.file}:${c.line}  ${c.name}${c.count ? ` (${c.count} places)` : ''}${c.law ? `  [${c.law}]` : ''}`);
+  for (const c of r.candidates) console.log(`  ${c.id}  ${c.tier.padEnd(6)} ${c.file}:${c.line}  ${c.name}${c.count ? ` (${c.count} places)` : ''}${c.law ? `  [UX law: ${c.law}]` : ''}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) main();   // realpath: the skill folder may be a link

@@ -108,6 +108,26 @@ The reference columns give the 10th percentile, the median and the 90th percenti
 | Words on the page | 125 | 661 | 1681 | 122 |
 | Page length (screens) | 1 | 7.5 | 14.6 | 1.2 |
 
+## Sprawl
+
+Five counts, each with a limit at the 90th percentile of all reference pages. A page is over a limit when its count is higher.
+
+| Measure | Limit |
+|---|---|
+| Font families | 4 |
+| Distinct text sizes | 14 |
+| Saturated hues | 3 |
+| Tracked uppercase labels | 5 |
+| Share of text under 12 px | 0.066 |
+
+| Measures over their limit on one page | All reference pages | All AI-built pages |
+|---|---|---|
+| 2 or more | 10.8% | 7% |
+| 3 or more | 1.9% | 1.8% |
+| 4 or more | 0.2% | 0.4% |
+
+Sprawl is rare in both groups, so it does not mark a page from an AI site builder. It marks a page that is outside the range of professionally made pages. Five or more font weights appear on 19% of reference pages and 9% of AI-built pages. The capture kept only the five most-used weights per page, so higher counts are not measured.
+
 ## Other facts about the reference pages
 
 - Two or fewer font families: 67%

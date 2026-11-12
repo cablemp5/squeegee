@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, symlinkSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { scan } from './detect.mjs';
@@ -157,4 +157,48 @@ test('smaller misses: zoom 1.0, multi-line body size, gap-x, trademark, Expo', (
   assert.ok(!idsFor('<h1>Acme™ Cloud</h1>').has('T04'));
   assert.ok(idsFor('<h1>Launch 🚀</h1>').has('T04'));
   assert.equal(scanFor('<main />', { 'package.json': '{"dependencies":{"expo":"~51.0.0"}}' }).stack.native, 'react-native');
+});
+
+test('em dash: a lone dash placeholder is data, a dash between words is copy', () => {
+  assert.ok(!idsFor('<td>{ping ?? "—"}</td>\n<span>—</span>').has('H01'));
+  assert.ok(idsFor('<p>Round over—next round soon</p>').has('H01'));
+});
+
+test('a face named in CSS but never loaded is flagged, a loaded or system face is not', () => {
+  const css = 'h2 { font-family: "Rajdhani", "Segoe UI", sans-serif; }';
+  assert.ok(idsFor('<main />', { 'app.css': css }).has('X05'));
+  assert.ok(!idsFor('<main />', { 'app.css': `@font-face { font-family: "Rajdhani"; src: url(r.woff2); }\n${css}` }).has('X05'));
+  assert.ok(!idsFor(`<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk">`, { 'app.css': 'h2 { font-family: "Space Grotesk", sans-serif; }' }).has('X05'));
+  assert.ok(!idsFor('<main />', { 'app.css': 'body { font-family: "Segoe UI", system-ui, sans-serif; }\ncode { font-family: var(--mono); }' }).has('X05'));
+});
+
+test('plain CSS: an h1 rule feeds the weight and centering defaults, and the style counts are reported', () => {
+  const r = scanFor('<main />', { 'app.css': '.hero h1 {\n  font-weight: 850;\n  text-align: center;\n}\np { font-size: 13px; color: #abc; font-weight: 400; text-transform: uppercase; }' });
+  for (const id of ['D05', 'D06']) assert.ok(defaultIds(r).has(id), `missing ${id}`);
+  assert.deepEqual(r.styles, { cssFiles: 1, fontFamilies: 0, fontSizes: 1, fontWeights: 2, colors: 1, uppercase: 1, gradients: 0 });
+  assert.ok(!defaultIds(scanFor('<main />', { 'app.css': 'h1 { font-weight: 500; }\nh2 { font-weight: 800; text-align: center; }' })).has('D05'));
+});
+
+test('measure.js is one expression a browser tool can evaluate', () => {
+  const src = readFileSync(join(here, 'measure.js'), 'utf8');
+  assert.equal(typeof new Function(`return () => (${src.replace(/^\/\/.*$/gm, '')})`)(), 'function');
+});
+
+test('plain CSS h1: reads the h1 rule itself, not a neighbor on the line or a descendant', () => {
+  const d = (css) => defaultIds(scanFor('<main />', { 'app.css': css }));
+  assert.ok(!d('p { font-weight: 800; text-align: center; } h1 { font-weight: 400; text-align: left; }').has('D05'));
+  assert.ok(!d('p { font-weight: 800; text-align: center; } h1 { font-weight: 400; text-align: left; }').has('D06'));
+  assert.ok(d('p { font-weight: 400; } h1 { font-weight: 800; }').has('D05'));
+  assert.ok(!d('h1 span { font-weight: 800; }').has('D05'));
+  assert.ok(d('h1,\nh2 {\n  font-weight: 700;\n}').has('D05'));
+  assert.ok(d('@media (min-width: 600px) {\n  .hero h1.title { font-weight: 900; }\n}').has('D05'));
+});
+
+test('font loading: a longer family name does not count, and non-family font variables are not faces', () => {
+  const tight = '@font-face { font-family: "Inter Tight"; src: url(t.woff2); }\n';
+  assert.ok(idsFor('<main />', { 'app.css': `${tight}body { font-family: "Rajdhani", sans-serif; }\nh1 { font-family: "Raj", sans-serif; }` }).has('X05'));
+  assert.ok(!idsFor('<main />', { 'app.css': `${tight}body { font-family: "Inter Tight", sans-serif; }` }).has('X05'));
+  assert.ok(!idsFor('<main />', { 'app.css': ':root { --font-display: swap; --font-weight: bold; --font-feature: "ss01"; }\nbody { font-family: system-ui, sans-serif; }' }).has('X05'));
+  assert.ok(idsFor('<main />', { 'app.css': ':root { --font-sans: "Rajdhani", sans-serif; }\nbody { font-family: var(--font-sans); }' }).has('X05'));
+  assert.ok(!idsFor('<main />', { 'layout.tsx': 'import { Space_Grotesk } from "next/font/google";', 'app.css': 'body { font-family: "Space Grotesk", sans-serif; }' }).has('X05'));
 });

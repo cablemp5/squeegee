@@ -55,7 +55,7 @@ You can also copy the `skills/squeegee` folder into your agent's skills folder.
 
 ## 2. Run your first audit
 
-Start with a report. Nothing in your project changes.
+Start with a report. It covers every screen and all 30 UX laws, and nothing in your project changes.
 
 ```
 /squeegee:squeegee audit app/page.tsx
@@ -71,10 +71,10 @@ The audit rates the screen on a four-step scale.
 |---|---|
 | Spotless | No slop. Squeegee says so and stops. |
 | Streaky | Light slop: a defect or a few tells on a design you otherwise chose. |
-| Grimy | Heavy slop: five or more stock defaults or tells. |
+| Grimy | Heavy slop: five or more stock defaults or tells, or sprawl, which means more text sizes, colors and labels than professional pages carry. |
 | Opaque | Slop maxed: the screen would fit any product. |
 
-Each finding says what it saw, where it lives in your code, and how to fix it. The audit stops there. When you're ready, run it again without `audit`. It shows the proposal with design directions, waits for your approval once, and then makes the changes. A Grimy or Opaque screen at `full` or `deep` gets three directions. A Streaky screen, or any `lite` run, gets one direction that keeps your design.
+Each finding says what it saw, where it lives in your code, why it counts and how to fix it. The reason is a research number, a threshold or a UX law in plain words. The audit stops there. When you're ready, run it again without `audit`. It shows the proposal with design directions, waits for your approval once, and then makes the changes. A Grimy or Opaque screen at `full` or `deep` gets three directions. A Streaky screen, or any `lite` run, gets one direction that keeps your design.
 
 ```
 /squeegee app/
@@ -102,8 +102,8 @@ Audits a folder without saving any screenshots.
 
 ## How it works
 
-1. It captures the screen at desktop and phone width, in dark mode too when the page has one.
-2. A detector scans your code with 16 candidate rules and 9 stock-default checks. The agent confirms each candidate on screen, adds six checks from the Laws of UX, and weighs the tells that need judgment.
+1. It captures the screen at desktop and phone width, in dark mode too when the page has one. For an app with several screens it audits each one. A script measures each screen: text sizes, weights, colors, contrast, target sizes, and fonts that are named but never loaded.
+2. A detector scans your code with 17 candidate rules and 9 stock-default checks. The agent confirms each candidate on screen, answers all 30 UX laws, and weighs the tells that need judgment.
 3. It rates the screen Spotless, Streaky, Grimy or Opaque.
 4. Without `audit`, it renders directions on your page's first section so you choose by looking: three for a Grimy or Opaque screen at `full` or `deep`, one that keeps your design for a Streaky screen or a `lite` run. Previews leave no lasting changes. It injects styles into the open page, and when that cannot show a direction it edits files briefly from a backup and restores them.
 5. It fixes the page in three passes: theme and tokens, then structure and copy, then motion. After each pass it captures the screen again, runs your typecheck, build and tests, and confirms that every link, field, handler and piece of content still exists.
@@ -164,7 +164,7 @@ Your choices go in `.squeegee.md` at the project root: the direction you picked,
 
 ### How finished is it?
 
-This is version 0.1.0, the first build. The detector passes its 21 tests, and the research scripts have run on 838 pages. Nobody has run a full `/squeegee` pass on a real project yet. The `npx skills add` path and agents other than Claude Code are untested.
+This is version 0.2.0. The detector passes its 27 tests, and the research scripts have run on 838 pages. One audit has run on a real project, and its misses shaped this version. Nobody has run a full fix pass on a real project yet. The `npx skills add` path and agents other than Claude Code are untested.
 
 ## The research behind it
 
@@ -189,6 +189,8 @@ Several signals often called AI tells differed little between the two groups, an
 | Two or more hype words | 36% | 23% |
 
 A cluster of stock defaults marked an AI-built page, and purple did not. So Squeegee counts stock defaults as a group, fixes each one where it is defined, and treats the other signals as things to weigh rather than ban.
+
+Stock defaults are one route to a bad rating. The other is sprawl. Squeegee counts five things on the rendered screen: font families, text sizes, saturated hues, small uppercase labels, and the share of text under 12 px. Each has a limit at the 90th percentile of the reference pages. Three or more over their limit appeared on 1.9% of reference pages and 1.8% of AI-built pages. So sprawl does not show that a builder made the page. It shows the page is outside the range of professional work, which is common in an interface that grew over many agent sessions.
 
 These numbers are associations in one sample of 84 AI-built landing pages from four builders. They do not prove cause. The signals record whether something is present, not whether it is done well. The mobile and desktop reference rows come from product websites, not app screens.
 
@@ -224,7 +226,7 @@ node --test skills/squeegee/scripts/detect.test.mjs
 
 ## Credits
 
-Squeegee's structure draws on [unslop](https://github.com/heydamir/unslop), [hallmark](https://github.com/Nutlope/hallmark), [impeccable](https://github.com/pbakaus/impeccable), [taste-skill](https://github.com/leonxlnx/taste-skill), [ui-craft](https://github.com/educlopez/ui-craft), [no-ai-design-slop](https://github.com/mengto/skills) and [design-lab](https://github.com/0xdesign/design-plugin). Its motion values come from [Emil Kowalski's skills](https://github.com/emilkowalski/skills). Its law checks follow [Laws of UX](https://lawsofux.com) by Jon Yablonski. This repo copies no text from any of them.
+Squeegee's structure draws on [unslop](https://github.com/heydamir/unslop), [hallmark](https://github.com/Nutlope/hallmark), [impeccable](https://github.com/pbakaus/impeccable), [taste-skill](https://github.com/leonxlnx/taste-skill), [ui-craft](https://github.com/educlopez/ui-craft), [no-ai-design-slop](https://github.com/mengto/skills) and [design-lab](https://github.com/0xdesign/design-plugin). Its motion values come from [Emil Kowalski's skills](https://github.com/emilkowalski/skills). Its UX law checks follow [Laws of UX](https://lawsofux.com) by Jon Yablonski. This repo copies no text from any of them.
 
 ## License
 

@@ -12,17 +12,17 @@ Before proposing anything, read the README, the route list, the data models and 
 - **Surface:** landing page, dashboard, desktop app or mobile app. This decides density.
 - **What must stay familiar:** the parts used so often that changing them would feel hostile.
 
-If the repo holds no brand material and the copy does not say what the product is, ask the user one question: who is this for and what should it feel like? Do not guess.
+If the repo holds no brand material and the copy does not say what the product is, ask the user one question: who is this for and what should it feel like?
 
 ## Sources, in order
 
-1. `--ref <url or image>`. Look at it, name its ingredients (ground, ink, accent, type, radius, density, imagery), and apply those ingredients to this product's content. Do not copy its layout, text or assets.
+1. `--ref <url or image>`. Look at it, name its ingredients (ground, ink, accent, type, radius, density, imagery), and apply those ingredients to this product's content. Take the ingredients only. Its layout, text and assets stay behind.
 2. A direction already saved in `.squeegee.md`. Use it without asking again.
 3. The archetypes below. Each is a starting point that you bend to the product's own colors and content.
 
 ## Three directions
 
-Offer three when the tier is Grimy or Opaque and the depth is `full` or `deep`. Otherwise offer one that keeps the existing design.
+The "Arguments" section of SKILL.md says whether to prepare three directions or one that keeps the existing design. This section covers the three.
 
 Each direction states:
 
@@ -40,7 +40,7 @@ Rules:
 
 - The three differ from each other on at least three of these axes: type genre, color temperature, light or dark ground, density, corner shape, imagery. Changing only palette, radius or icon style does not make a new direction.
 - All three are finished to the same level. No option is a sketch beside a polished one.
-- All three meet the thresholds in `ux-laws.md`. A plain direction that is correct beats a striking one that fails contrast.
+- All three pass the scored UX laws in `ux-laws.md`. A plain direction that is correct beats a striking one that fails contrast.
 - All three pass the over-correction check below before the user sees them.
 - At least one direction is the quiet option: closest to the current screen, with the stock defaults replaced and nothing else moved.
 
@@ -50,8 +50,8 @@ Previews must leave no lasting change in the project. The preservation inventory
 
 With a browser tool, in order of preference:
 
-1. **Inject, do not edit.** Load the page and add a temporary stylesheet to the rendered page through the browser tool (for example its script or style injection). Override tokens and the first section's styles there. No file changes, so nothing needs restoring.
-2. **If injection cannot show the direction** (it needs a different font file or changed markup): copy each file you will touch to `.squeegee/preview-backup/` first, with its path, and list any file you create in `.squeegee/preview-created.txt`. Edit, capture, then restore every copied file from the backup and delete every created file. Never use `git checkout`, `git restore`, `git stash` or `git clean` to restore: the tree may hold the user's uncommitted work.
+1. **Inject first.** Load the page and add a temporary stylesheet to the rendered page through the browser tool (for example its script or style injection). Override tokens and the first section's styles there. No file changes, so nothing needs restoring.
+2. **If injection cannot show the direction** (it needs a different font file or changed markup): copy each file you will touch to `.squeegee/preview-backup/` first, with its path, and list any file you create in `.squeegee/preview-created.txt`. Edit, capture, then restore every copied file from the backup and delete every created file. The backup is the only restore path (rule 10 in SKILL.md).
 
 Then:
 
@@ -68,7 +68,7 @@ Ask the user to pick by number and to name anything to change. Save the result t
 
 ## Archetypes
 
-Ten starting points. Eight are drawn from the measured profiles of the reference pages grouped by kind, in the "Reference profiles by kind" table of [RESULTS.md](https://github.com/cablemp5/squeegee/blob/master/research/RESULTS.md). Numbers are medians or shares for that group, and the smaller groups hold 20 to 30 pages, so read them as a sketch. The two native archetypes rest on the platform guides: the research holds no native app screens. None names a brand: describe ingredients, never "like" another product.
+Ten starting points. Eight are drawn from the measured profiles of the reference pages grouped by kind, in the "Reference profiles by kind" table of [RESULTS.md](https://github.com/cablemp5/squeegee/blob/master/research/RESULTS.md). Numbers are medians or shares for that group, and the smaller groups hold 20 to 30 pages, so read them as a sketch. The two native archetypes rest on the platform guides: the research holds no native app screens. Describe each by its ingredients, with no brand named.
 
 | Archetype | Fits | Ingredients | Measured profile |
 |---|---|---|---|
@@ -89,7 +89,7 @@ Pick by what the product is, then bend: use the product's own brand color as the
 
 Run this on each direction before showing it, and on the finished screen at step 7. A fix that lands on one of these has replaced one template with another. Undo it and choose from the product.
 
-| If you removed | Do not land on |
+| If you removed | The next template, which is the same finding again |
 |---|---|
 | A purple or blue gradient | A cream ground with a terracotta or rust accent and a serif headline |
 | Inter or the system font | Whichever face is fashionable this year, chosen with no reason from the product |

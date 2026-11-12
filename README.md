@@ -36,6 +36,13 @@ Install the Squeegee skill from https://github.com/cablemp5/squeegee using its R
 /plugin install squeegee@squeegee
 ```
 
+An agent installing it from a shell can run the same steps as CLI commands:
+
+```
+claude plugin marketplace add cablemp5/squeegee
+claude plugin install squeegee@squeegee
+```
+
 Either way, restart your agent afterward. Installed as a plugin, the command is `/squeegee:squeegee`. Step 2 uses that full form. The later examples use the short form `/squeegee`: if your agent does not find it, type `/squeegee:squeegee` instead.
 
 **Using another agent?** Agents that read skills, such as Cursor or Codex, can install it with:

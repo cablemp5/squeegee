@@ -8,7 +8,7 @@ license: MIT
 
 # Squeegee
 
-An interface looks generated when nobody chose anything. The research behind this skill measured 565 professionally made sites and 273 pages published from AI builders. Purple gradients, three-card rows and bento grids were about as common on the good sites as on the generated ones. What marked the generated pages was a cluster of stock defaults: shadcn-style theme variables, Lucide icons, no chosen font, a heavy headline, a badge above it. Five or more of nine such defaults appeared on 2% of the reference landing pages and 76% of the AI-built ones. That is an association in one sample, and `research/RESULTS.md` lists its limits.
+An interface looks generated when nobody chose anything. The research behind this skill measured 565 professionally made sites and 273 pages published from AI builders. Purple gradients, three-card rows and bento grids were about as common on the good sites as on the generated ones. What marked the generated pages was a cluster of stock defaults: shadcn-style theme variables, Lucide icons, no chosen font, a heavy headline, a badge above it. Five or more of nine such defaults appeared on 2% of the reference landing pages and 65% of the AI-built ones. That is an association in one sample, and [RESULTS.md](https://github.com/cablemp5/squeegee/blob/master/research/RESULTS.md) lists its limits.
 
 So the job is to make the choices that were never made, from the product itself, at the place in the code where they belong, without breaking anything that works.
 
@@ -34,32 +34,34 @@ So the job is to make the choices that were never made, from the product itself,
 | `fix` | Applies the findings without stopping for approval. See "Stops" below. |
 | neither | Audit, propose, stop once for approval, then fix. The default. |
 | `lite` | Presentation only: tokens, type, color, spacing, states of existing elements. No new elements, no moved sections. |
-| `full` | May restructure a section that has a layout tell. The default depth when the user gives none and approves the proposal. |
+| `full` | May restructure a section that has a layout tell. |
 | `deep` | May rework the page, add missing loading, empty and error states where the code already tracks that state, and fix structural UX findings. |
 | `<path or URL>` | A file or folder is the target. A URL is where to look: the target is then the project folder that serves it, so pass that folder to the detector. |
 | `--ref <url or image>` | A design the user wants this to feel like. It outranks the archetypes. |
-| `--no-shots` | Save no images and build no `compare.html`. You still look at the screen. |
+| `--no-shots` | Save no images and build no `compare.html` or `directions.html`. You still look at the screen. |
 | `--no-recheck` | Skip the blind recheck. |
+
+With no depth given, use the depth proposed from the tier (see "Tiers"). In `fix` mode that depth is capped at `full`: run `deep` only when the user typed `deep`.
 
 ## Stops
 
 - **Default mode:** one stop. Present the audit, the proposed depth and the directions together, then wait.
-- **`fix` mode:** no stop for the findings. Stop only if a direction is needed and none is available.
+- **`fix` mode:** no stop for the findings. A direction is needed only when three would be prepared (step 5). Stop for it only if none is available. With Streaky or `lite`, apply the single direction that keeps the existing design without stopping. Do not apply changes that need approval (rule 3, H01, copy changes): list them under "Still open" in the final report.
 - **A direction is available without asking** when `.squeegee.md` records one or `--ref` is given. Use it and render no previews.
-- **Any mode:** stop when a check fails after the repair rounds, when a shared definition has consumers outside the target and no variant can isolate the fix, or when a change needs approval under rule 3.
+- **Any mode:** stop when a check fails after the repair rounds, or when a shared definition has consumers outside the target and no variant can isolate the fix. Outside `fix` mode, also stop when a change needs approval under rule 3.
 
 ## Run
 
-0. **Set up.** Save the output of `git status --porcelain` to `.squeegee/start-status.txt`: this is the baseline you compare against later. Create `.squeegee/.gitignore` containing `*`. Warn if the tree has uncommitted changes, and name them as the user's. Read `.squeegee.md` if it exists: it holds kept decisions and the chosen direction. Run `node <skill folder>/scripts/detect.mjs <target> --json` and read its `stack` field. If the styling system is CSS-in-JS or a native toolkit, the detector's line rules do not apply: the audit, tier, directions and judged fixes still run, and the report lists the detector as not run. Find a browser tool in this order: Playwright MCP, Chrome DevTools MCP, the harness's own browser. For a native app, use a simulator or device screenshot tool, or ask for screenshots. With none, continue on code alone and recommend one in the report. Never install one. For a page to look at, use the URL argument, then a local server that is already running, then ask before starting the project's dev script.
+0. **Set up.** Create `.squeegee/.gitignore` containing `*` first, so nothing Squeegee writes shows up in git. Delete `.squeegee/shots/` if an earlier run left it, so old images do not reach the comparison pages. Then save the baseline you compare against later: the output of `git status --porcelain` to `.squeegee/start-status.txt`, and a hash of `git diff` (`git diff | git hash-object --stdin`) to `.squeegee/start-diff.txt`. Status alone misses a new edit to a file that was already modified. If the folder is not a git repository, say so in the report, save no baseline, and rely on `.squeegee/changes.jsonl` and the preview backups for the later checks. Warn if the tree has uncommitted changes, and name them as the user's. Read `.squeegee.md` if it exists: it holds kept decisions and the chosen direction. Run `node <skill folder>/scripts/detect.mjs <target> --json > .squeegee/detect.json` and read only its `stack` field now. The candidates wait until step 2. If the styling system is CSS-in-JS or a native toolkit, the detector's line rules do not apply: the audit, tier, directions and judged fixes still run, and the report lists the detector as not run. Find a browser tool in this order: Playwright MCP, Chrome DevTools MCP, the harness's own browser. For a native app, use a simulator or device screenshot tool, or ask for screenshots. With none, continue on code alone and recommend one in the report. Never install one. For a page to look at, use the URL argument, then a local server that is already running, then ask before starting the project's dev script.
 1. **Look first.** View the screen at 1440 px and 390 px wide, in light and dark mode when both exist, and check 320 px for horizontal overflow. Unless `--no-shots`, save the images as `.squeegee/shots/before-<width>-<mode>.png`. Before you read the detector's candidates, write four lines: what the screen is for, what works and stays, what reads as generated, what is broken.
-2. **Audit.** Load `references/tells.md` and `references/ux-laws.md`. Confirm or reject each detector candidate and each stock default under rule 8. Add the judged tells and the six law checks. Drop anything `.squeegee.md` keeps.
+2. **Audit.** Load `references/tells.md` and `references/ux-laws.md`. Read the candidates and defaults in `.squeegee/detect.json`. Confirm or reject each detector candidate and each stock default under rule 8. Add the judged tells and the six law checks. Drop anything `.squeegee.md` keeps.
 3. **Rate the tier** from the table below. Give one sentence of reason.
 4. **Report.** Load `references/report.md` and write the audit. `audit` ends here. A Spotless tier ends here in every mode.
-5. **Set the direction.** Load `references/passes.md` and take the preservation inventory now, before any file changes. Then load `references/directions.md`. If a direction is available, use it. Otherwise: for Grimy or Opaque at `full` or `deep` (use the proposed depth when the user gave none), prepare three directions; for Streaky or `lite`, prepare one that keeps the existing design. In default mode, show the directions with the audit and stop. Save the chosen direction to `.squeegee.md`.
+5. **Set the direction.** Load `references/passes.md` and take the preservation inventory now, before any file changes. Then load `references/directions.md`. If a direction is available, use it. Otherwise: for Grimy or Opaque at `full` or `deep` (the depth rule is under "Arguments"), prepare three directions; for Streaky or `lite`, prepare one that keeps the existing design. In default mode, show the directions with the audit and stop. Save the chosen direction to `.squeegee.md`.
 6. **Fix in three pass groups**, following `references/passes.md`: theme and tokens, then structure and copy, then motion. After each group: look at the screen, run the project's typecheck, build and tests, compare the preservation inventory, and append each change to `.squeegee/changes.jsonl`. If a check fails, repair and check again, three rounds at most per group. If it still fails, restore the edits of that group, stop, and report.
 7. **Check for over-correction** with the table in `references/directions.md`. Undo a fix that landed on another template.
 8. **Blind recheck** at `full` and `deep` unless `--no-recheck`. Start a fresh subagent with the final screenshots and the code, and nothing else: no first audit, no before images, no list of changes. It runs steps 2 and 3 and returns a tier and findings. If its tier is worse than yours, do one more fix round, then stop. With no subagents available, rerun the detector and label the tier self-graded.
-9. **Finish.** Take the final look. Unless `--no-shots`, save `after-*` images and run `node <skill folder>/scripts/compare.mjs .squeegee/shots` to build `compare.html`. Compare `git status --porcelain` with the baseline and confirm that every difference is a change you logged. Write the final report.
+9. **Finish.** Take the final look. Unless `--no-shots`, save `after-*` images and run `node <skill folder>/scripts/compare.mjs .squeegee/shots` to build `compare.html`. Compare `git status --porcelain` with the baseline and confirm that every difference is a change you logged. Report any file that changed and is not in `changes.jsonl`. Write the final report.
 
 There are five scheduled looks: before the audit, after each pass group, and at the end. Each repair round adds one.
 
@@ -68,11 +70,11 @@ There are five scheduled looks: before the audit, after each pass group, and at 
 | Tier | Meaning | Anchor |
 |---|---|---|
 | Spotless | no slop | No confirmed defects, 2 confirmed tells or fewer, fewer than 5 stock defaults. |
-| Streaky | light slop | 3 or 4 confirmed tells on a design that was otherwise chosen. The screen still fits only this product. |
+| Streaky | light slop | Any confirmed defect, or 3 or 4 confirmed tells, on a design that was otherwise chosen. The screen still fits only this product. |
 | Grimy | heavy slop | 5 or more stock defaults, or 5 or more confirmed tells. Parts of the screen would fit any product. |
 | Opaque | slop maxed | 7 or more stock defaults, or 8 or more confirmed tells, or the whole screen still fits after you swap in another product's name. |
 
-Count only what you confirmed on the screen under audit. Suggest a depth from the tier: Streaky suggests `lite`, Grimy suggests `full`, Opaque suggests `deep`.
+Count only what you confirmed on the screen under audit. The tier sets the proposed depth: Streaky proposes `lite`, Grimy proposes `full`, Opaque proposes `deep`.
 
 ## Rule tiers
 

@@ -46,7 +46,7 @@ Rules:
 
 ## Rendering the previews
 
-Previews must not change the project. The preservation inventory from `passes.md` is already taken at this point.
+Previews must leave no lasting change in the project. The preservation inventory from `passes.md` is already taken at this point.
 
 With a browser tool, in order of preference:
 
@@ -58,17 +58,17 @@ Then:
 3. Capture each direction at 1440 px. Save as `.squeegee/shots/direction-1.png`, `-2.png`, `-3.png`. With `--no-shots`, show the images in the conversation and skip steps 4 and 5.
 4. Write `.squeegee/shots/directions.json`: an array of `{ "name", "summary", "preserved", "changes", "cost" }` in the same order.
 5. Run `node <skill folder>/scripts/compare.mjs directions .squeegee/shots`. It writes `.squeegee/directions.html`.
-6. Confirm that `git status --porcelain` matches `.squeegee/start-status.txt` exactly, and that the preservation inventory is unchanged. If either differs, restore from the backup before doing anything else.
+6. Confirm that `git status --porcelain` matches `.squeegee/start-status.txt` exactly, that the hash of `git diff` matches `.squeegee/start-diff.txt`, and that the preservation inventory is unchanged. Outside a git repository, compare each file in `.squeegee/preview-backup/` with its original instead. If anything differs, restore from the backup before doing anything else.
 
 Without a browser tool, write the three directions as text in the format above and say that they were not rendered.
 
-For sections with a layout tell (three equal cards, the same centered template), add two layout options per section to the same page at `full` and `deep`. Each keeps all the content and links.
+`compare.mjs` shows one image per direction and nothing else. For a section with a layout tell (three equal cards, the same centered template) at `full` or `deep`, put the layout change inside a direction's preview and name it in that direction's `changes`. It keeps all the content and links.
 
 Ask the user to pick by number and to name anything to change. Save the result to `.squeegee.md`.
 
 ## Archetypes
 
-Ten starting points. Eight are drawn from the measured profiles of the reference pages grouped by kind, in the "Reference profiles by kind" table of `research/RESULTS.md`. Numbers are medians or shares for that group, and the smaller groups hold 20 to 30 pages, so read them as a sketch. The two native archetypes rest on the platform guides: the research holds no native app screens. None names a brand: describe ingredients, never "like" another product.
+Ten starting points. Eight are drawn from the measured profiles of the reference pages grouped by kind, in the "Reference profiles by kind" table of [RESULTS.md](https://github.com/cablemp5/squeegee/blob/master/research/RESULTS.md). Numbers are medians or shares for that group, and the smaller groups hold 20 to 30 pages, so read them as a sketch. The two native archetypes rest on the platform guides: the research holds no native app screens. None names a brand: describe ingredients, never "like" another product.
 
 | Archetype | Fits | Ingredients | Measured profile |
 |---|---|---|---|

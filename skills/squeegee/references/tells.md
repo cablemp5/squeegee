@@ -1,6 +1,6 @@
 # Tells
 
-Every rule here has an id, the evidence for it, and its fix. The evidence columns give the share of pages showing the signal: 282 reference landing pages against 84 AI-built landing pages, both limited to pages of 250 words or more and 3 screens or longer. The source is `research/RESULTS.md`. "Not measured" means the rule rests on judgment or on other skills' experience, and you should weigh it that way.
+Every rule here has an id, the evidence for it, and its fix. The evidence columns give the share of pages showing the signal: 282 reference landing pages against 84 AI-built landing pages, both limited to pages of 250 words or more and 3 screens or longer. The source is [RESULTS.md](https://github.com/cablemp5/squeegee/blob/master/research/RESULTS.md). "Not measured" means the rule rests on judgment or on other skills' experience, and you should weigh it that way.
 
 A tell is a prompt to look, never a verdict. Confirm that it reaches the screen under audit. Then run the removal test.
 
@@ -12,16 +12,16 @@ One of these alone means nothing: 24% of the reference landing pages use Inter. 
 
 | Present on one page | Reference | AI-built |
 |---|---|---|
-| 4 or more | 10% | 92% |
-| 5 or more | 2% | 76% |
-| 6 or more | 1% | 45% |
-| 7 or more | 0% | 21% |
+| 4 or more | 8% | 90% |
+| 5 or more | 2% | 65% |
+| 6 or more | 0% | 37% |
+| 7 or more | 0% | 13% |
 
 | Id | Default (as the research measured it) | Reference | AI-built | Fix at the source |
 |---|---|---|---|---|
 | D01 | shadcn-style theme variables present | 6% | 87% | The variables are fine. Their stock values are the problem: replace them with the product's own neutrals, accent and radius. |
 | D02 | Lucide icons | 10% | 87% | Keep the set when it suits. Set stroke width and size once to match the type weight, or use the product's icon set. |
-| D03 | No font chosen (system default stack) | 15% | 58% | Choose a face from the direction and load it once in the theme. A native app using the system font on purpose is exempt. |
+| D03 | No font chosen (system default stack) | 5% | 24% | Choose a face from the direction and load it once in the theme. A native app using the system font on purpose is exempt. |
 | D04 | Inter | 24% | 50% | Keep it when it suits the product. Otherwise set a face from the direction. |
 | D05 | Headline weight 700 or more | 22% | 67% | The reference median is 500. Carry emphasis with size unless the direction calls for a heavy headline. |
 | D06 | Centered headline | 40% | 50% | Weak evidence. Align to the layout's grid when the content is not symmetric. |
@@ -76,7 +76,7 @@ Layout:
 | J09 | Cards inside cards | 23% | 35% | A bordered box inside a bordered box. | Remove the inner border. Group with spacing. |
 | J10 | Every section the same centered template | not measured | not measured | Heading, subhead, grid, same padding, repeated. | Vary alignment and density by what each section says. |
 | J11 | Colored left stripe or colored border on cards | 1% | 6% | A stripe as decoration. | Keep only where it marks a state. Then add an icon and a label so color is not the only signal. |
-| J12 | Fake terminal or browser window | not measured | not measured | A drawn window around invented content. | Report it and ask for a real capture of the product. Do not remove it without approval: it is content. |
+| J12 | Fake terminal or browser window | not measured | not measured | A drawn window around invented content. | Report it and ask for a real capture of the product. Never remove it: it is content, and removal is outside Squeegee's scope. |
 
 Type and components:
 
@@ -111,7 +111,7 @@ Every metric, chart, column and control on a dashboard is content. Reorder and r
 | A01 | A grid of 8 equal KPI cards | Keep all 8. Give one or two the lead by size and position, and set the rest smaller. |
 | A02 | First screen holds only large metric cards while a chart and a table sit below | Tighten the cards so the existing chart and the start of the existing table rise above the fold. |
 | A03 | Marketing spacing: card padding of 32 to 48 px | 16 to 20 px. Table rows of 40 to 48 px. |
-| A04 | Decorative sparklines, gauges and progress rings | Report any chart nobody could read a value from. Remove it only with approval. |
+| A04 | Decorative sparklines, gauges and progress rings | Report any chart nobody could read a value from. Group, order and set it quieter. Never remove it: removal is outside Squeegee's scope. |
 | A05 | 3D charts, a pie with more than 3 slices, a bright hue per series with no meaning | A flat chart. One hue with steps plus one highlight where series are ordered. Distinct hues are right for unordered categories, and a pie or donut is fine for 2 or 3 parts of a whole. |
 | A06 | Uppercase table headers, status as large colored pills | Sentence case. A 6 to 8 px dot plus a word. |
 | A07 | No sticky header on a table longer than 15 rows | Make the header sticky. Use tabular numerals. |

@@ -70,7 +70,7 @@ Order: defects, tells, the default cluster, judged tells. Within a tier, group b
 How the audit ends depends on the mode:
 
 - `audit`: end after the proposed depth. Ask nothing.
-- Default mode: follow the audit with the directions from step 5, then ask once for approval, a depth and a direction.
+- Default mode: follow the audit with the directions from step 5. Unless `--no-shots`, link `.squeegee/directions.html`. Then ask once for approval, a depth and a direction.
 - `fix`: do not ask for approval of the findings. Continue to step 5.
 
 ## Final report format
@@ -92,7 +92,7 @@ Findings: 13 before, 1 after. Stock defaults: 6 of 9 before, 1 of 9 after.
 | R02 | "Trusted by 10,000+ teams" in `Hero.tsx:22` | Report only. Needs a source from you. |
 | J10 | Sections share one template | Needs `full` depth. This run was `lite`. |
 
-Each row gives one of three reasons: kept by your decision, needs a deeper depth, or report only.
+Each row gives one of four reasons: kept by your decision, needs a deeper depth, report only, or needs your approval. In `fix` mode, changes that need approval (such as H01 and copy changes) are listed here and not applied.
 
 ## Left alone
 <What you chose not to change, and why.>

@@ -52,7 +52,7 @@ function compare(dir) {
   const files = readdirSync(dir).filter((f) => /^before-.+\.(png|jpe?g|webp)$/i.test(f)).sort();
   const pairs = files.map((b) => [b, b.replace(/^before-/, 'after-')]).filter(([, a]) => existsSync(join(dir, a)));
   if (!pairs.length) { console.error(`no before-*/after-* image pairs in ${dir}`); process.exit(2); }
-  const rel = basename(dir);
+  const rel = basename(resolve(dir));
   const body = `<h1>Before and after</h1>\n<p class="muted">${pairs.length} view${pairs.length === 1 ? '' : 's'}. Before on the left, after on the right.</p>\n` +
     pairs.map(([b, a]) => {
       const label = b.replace(/^before-/, '').replace(/\.\w+$/, '').replace(/-/g, ', ');
@@ -71,12 +71,12 @@ function directions(dir) {
   if (!shots.length) { console.error(`no direction-<n> images in ${dir}`); process.exit(2); }
   const metaPath = join(dir, 'directions.json');
   const meta = existsSync(metaPath) ? JSON.parse(readFileSync(metaPath, 'utf8')) : [];
-  const rel = basename(dir);
+  const rel = basename(resolve(dir));
   const row = (label, value) => (value ? `<dt>${label}</dt><dd>${esc(Array.isArray(value) ? value.join('. ') : value)}</dd>` : '');
   const body = `<h1>Directions</h1>\n<p class="muted">Each direction is rendered on this page's own first section. Pick one by number and say what you would change.</p>\n<div class="three">\n` +
-    shots.map((f, i) => {
-      const m = meta[i] || {};
-      return `  <figure id="direction-${i + 1}"><figcaption>${i + 1}. ${esc(m.name || `Direction ${i + 1}`)}</figcaption><img src="${esc(rel)}/${esc(f)}" alt="Direction ${i + 1}">\n` +
+    shots.map((f) => {
+      const n = parseInt(f.match(/\d+/)), m = meta[n - 1] || {};   // keyed by the file's number, so a gap does not shift labels
+      return `  <figure id="direction-${n}"><figcaption>${n}. ${esc(m.name || `Direction ${n}`)}</figcaption><img src="${esc(rel)}/${esc(f)}" alt="Direction ${n}">\n` +
         `    <dl>${row('Summary', m.summary)}${row('Stays as it is', m.preserved)}${row('Main changes', m.changes)}${row('Needs', m.cost)}</dl></figure>`;
     }).join('\n') + '\n</div>';
   const out = join(dirname(resolve(dir)), 'directions.html');

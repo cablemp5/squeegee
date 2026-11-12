@@ -44,11 +44,11 @@ Each check names how it can be confirmed. "Rendered" needs a browser tool that c
 - Flag for judgment: more than 7 top-level navigation items of equal weight, more than 4 pricing tiers, or more than 2 calls to action in the first screen.
 - This is a prompt, never an automatic failure. The reference median is 7 navigation links and the 90th percentile is 59, because large sites have footers.
 - Confirm: judged.
-- Fix at `lite` and `full`: rank what exists (make one option the default, group the rest). Removing choices is a `deep` change and needs approval.
+- Fix at every depth: group, order and visually rank what exists (make one option the default, set the rest quieter). Never remove a choice. Removal is outside Squeegee's scope, so report it if the screen needs it.
 
 ### 6. Occam's Razor: nothing is there without a job
 
-- Apply the removal test from SKILL.md rule 6 to every wrapper, border, shadow, icon, label and animation.
+- Apply the removal test from SKILL.md rule 7 to every wrapper, border, shadow, icon, label and animation.
 - Fail: an element that passes the removal test (nothing gets worse without it).
 - Confirm: judged.
 - Fix: delete it. Add nothing in its place.
@@ -87,7 +87,7 @@ These have no check. They shape how you weigh the others.
 
 ## Measured values to aim for
 
-From the 565 reference pages (10th percentile, median, 90th percentile), as published in `research/RESULTS.md`. These describe what good sites do. They are not limits.
+From the 565 reference pages (10th percentile, median, 90th percentile), as published in [RESULTS.md](https://github.com/cablemp5/squeegee/blob/master/research/RESULTS.md). These describe what good sites do. They are not limits.
 
 | Property | Low | Median | High |
 |---|---|---|---|

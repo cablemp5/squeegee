@@ -227,7 +227,8 @@ function parseArgs(argv) {
 function readSites(path) {
   const [head, ...lines] = readFileSync(path, 'utf8').trim().split(/\r?\n/);
   const keys = head.split(',');
-  return lines.filter(Boolean).map((l) => Object.fromEntries(l.split(',').map((v, i) => [keys[i], v.trim()])));
+  // A list without an n column (such as reference-sites.csv) is numbered by row, so screenshot names stay unique.
+  return lines.filter(Boolean).map((l, row) => { const s = Object.fromEntries(l.split(',').map((v, i) => [keys[i], v.trim()])); s.n ||= String(row + 1); return s; });
 }
 
 function findChrome() {
@@ -252,6 +253,7 @@ class Tab {
     const tab = new Tab(info.id);
     tab.ws = new WebSocket(info.webSocketDebuggerUrl);
     await new Promise((ok, bad) => { tab.ws.onopen = ok; tab.ws.onerror = () => bad(new Error('ws failed')); });
+    tab.ws.onclose = tab.ws.onerror = () => { for (const { bad } of tab.pending.values()) bad(new Error('tab connection closed')); tab.pending.clear(); };
     tab.ws.onmessage = (m) => {
       const msg = JSON.parse(m.data);
       if (msg.id && tab.pending.has(msg.id)) { const { ok, bad } = tab.pending.get(msg.id); tab.pending.delete(msg.id); msg.error ? bad(new Error(msg.error.message)) : ok(msg.result); }
@@ -262,7 +264,11 @@ class Tab {
   constructor(id) { this.id = id; this.seq = 0; this.pending = new Map(); this.listeners = new Set(); }
   send(method, params = {}) {
     const id = ++this.seq;
-    return new Promise((ok, bad) => { this.pending.set(id, { ok, bad }); this.ws.send(JSON.stringify({ id, method, params })); });
+    return new Promise((ok, bad) => {
+      const t = setTimeout(() => { this.pending.delete(id); bad(new Error(`${method} timed out`)); }, NAV_TIMEOUT_MS + 15000);
+      this.pending.set(id, { ok: (v) => { clearTimeout(t); ok(v); }, bad: (e) => { clearTimeout(t); bad(e); } });
+      this.ws.send(JSON.stringify({ id, method, params }));
+    });
   }
   // Resolves on the first matching event, or with null at the timeout.
   until(test, ms) {
@@ -312,6 +318,8 @@ async function main() {
   sites = sites.slice(0, opt.limit);
   mkdirSync(join(opt.outDir, 'shots'), { recursive: true });
   const outFile = join(opt.outDir, 'measurements.jsonl');
+  // analyze.mjs counts every row, so appending a second run would duplicate the sample.
+  if (existsSync(outFile)) { console.error(`${outFile} already exists. Pick a fresh output folder.`); process.exit(2); }
   const profile = join(opt.outDir, 'chrome-profile');
   const chrome = spawn(findChrome(), ['--headless=new', `--remote-debugging-port=${PORT}`, `--user-data-dir=${profile}`,
     '--no-first-run', '--disable-extensions', '--hide-scrollbars', '--mute-audio', '--window-size=1440,900', 'about:blank'], { stdio: 'ignore' });
@@ -330,8 +338,9 @@ async function main() {
     };
     await Promise.all(Array.from({ length: opt.jobs }, worker));
   } finally {
+    const running = chrome.exitCode === null && chrome.signalCode === null;
     chrome.kill();
-    await new Promise((r) => chrome.once('exit', r));
+    if (running) await new Promise((r) => chrome.once('exit', r));
     try { rmSync(profile, { recursive: true, force: true }); } catch {}
   }
   console.log(`done: ${sites.length} sites, ${failed} failed captures, results in ${outFile}`);

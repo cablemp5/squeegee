@@ -80,11 +80,11 @@
     },
     {
       "signal": "No chosen font (system default stack)",
-      "reference": 23,
-      "aiBuilt": 45,
-      "referenceLanding": 15,
-      "aiBuiltLanding": 58,
-      "lift": 3.5
+      "reference": 13,
+      "aiBuilt": 23,
+      "referenceLanding": 5,
+      "aiBuiltLanding": 24,
+      "lift": 3.7
     },
     {
       "signal": "Headline weight 700 or more",
@@ -314,38 +314,38 @@
   "cluster": [
     {
       "atLeast": 3,
-      "reference": 31,
-      "aiBuilt": 96,
-      "referenceLanding": 30,
+      "reference": 27,
+      "aiBuilt": 95,
+      "referenceLanding": 26,
       "aiBuiltLanding": 96
     },
     {
       "atLeast": 4,
-      "reference": 9,
-      "aiBuilt": 60,
-      "referenceLanding": 10,
-      "aiBuiltLanding": 92
+      "reference": 8,
+      "aiBuilt": 59,
+      "referenceLanding": 8,
+      "aiBuiltLanding": 90
     },
     {
       "atLeast": 5,
       "reference": 2,
-      "aiBuilt": 46,
+      "aiBuilt": 40,
       "referenceLanding": 2,
-      "aiBuiltLanding": 76
+      "aiBuiltLanding": 65
     },
     {
       "atLeast": 6,
-      "reference": 1,
-      "aiBuilt": 26,
-      "referenceLanding": 1,
-      "aiBuiltLanding": 45
+      "reference": 0,
+      "aiBuilt": 21,
+      "referenceLanding": 0,
+      "aiBuiltLanding": 37
     },
     {
       "atLeast": 7,
       "reference": 0,
-      "aiBuilt": 11,
+      "aiBuilt": 6,
       "referenceLanding": 0,
-      "aiBuiltLanding": 21
+      "aiBuiltLanding": 13
     }
   ],
   "medians": [

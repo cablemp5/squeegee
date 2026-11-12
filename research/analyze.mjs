@@ -4,7 +4,7 @@
 //
 //   node research/analyze.mjs <reference.jsonl> <ai-built.jsonl> [--write research]
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -25,7 +25,8 @@ const commonRadius = (r) => topNum((r.radii || []).filter(([v]) => +v > 0 && +v 
 export const SIGNALS = {
   'shadcn-style theme variables present': (r) => r.shadcnVars >= 3,
   'Lucide icons': (r) => r.lucide > 0,
-  'No chosen font (system default stack)': (r) => hasFont(r, /^(ui-sans-serif|system-ui|-apple-system|blinkmacsystemfont|segoe ui|sans-serif|arial|helvetica)/),
+  // The most-used body family only: one system-font element on an Inter page is not "no font chosen".
+  'No chosen font (system default stack)': (r) => /^(ui-sans-serif|system-ui|-apple-system|blinkmacsystemfont|segoe ui|sans-serif|arial|helvetica)/.test(((r.fonts || [])[0] || [''])[0].toLowerCase()),
   'Inter': (r) => hasFont(r, /^inter\b/),
   'Headline weight 700 or more': (r) => !!r.h1 && +r.h1.weight >= 700,
   'Centered headline': (r) => !!r.h1 && r.h1.centered,
@@ -153,7 +154,7 @@ function markdown(r, good) {
   add('- These are associations in one sample, not proof of cause. No uncertainty ranges are computed, so treat differences of a few points as noise.');
   add('- A signal records that a pattern is present, not how well it is executed. A three-card row on a well-made site and on a generated page count the same.');
   add('- Rates are per page and are not adjusted for page length. The reference pages are several times longer than the AI-built ones, so they have more chances to contain any given pattern.');
-  add('- Signals are measured on the rendered page and are broader than their plain names suggest. "shadcn-style theme variables present" means at least three of `--radius`, `--primary`, `--muted-foreground` and `--ring` are set on the root element. It does not check their values. "Lucide icons" and "Inter" mean any use.');
+  add('- Signals are measured on the rendered page and are broader than their plain names suggest. "shadcn-style theme variables present" means at least three of `--radius`, `--primary`, `--muted-foreground` and `--ring` are set on the root element. It does not check their values. "Lucide icons" and "Inter" mean any use. "No chosen font" means the most-used body family is a system face.');
   add('- The page is not scrolled, so content that loads on scroll is not measured. A reduced-motion rule inside a stylesheet served from another origin cannot be read and counts as absent.');
   add('- Fonts are the declared families, which may differ from the face that loaded. Contrast ignores background images.');
   add('- "AI-built" means hosted on a builder\'s publish domain. That does not show how much manual work a page received. The pages were found through Hacker News posts and a public scan index, so they are not a random sample of what the builders produce.');
@@ -180,9 +181,9 @@ function main() {
     writeFileSync(join(dir, 'RESULTS.md'), markdown(r, good));
     writeFileSync(join(dir, 'results.json'), JSON.stringify(r, null, 2) + '\n');
     const rows = [...good].sort((a, b) => a.surface.localeCompare(b.surface) || a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
-    writeFileSync(join(dir, 'reference-sites.csv'), 'surface,category,name,url\n' + rows.map((x) => [x.surface, x.category, x.name, x.url].join(',')).join('\n') + '\n');
+    writeFileSync(join(dir, 'reference-sites.csv'), 'n,surface,category,name,url\n' + rows.map((x) => [x.n, x.surface,x.category, x.name, x.url].join(',')).join('\n') + '\n');
     console.log(`\nwrote RESULTS.md, results.json and reference-sites.csv to ${dir}`);
   }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
+if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) main();

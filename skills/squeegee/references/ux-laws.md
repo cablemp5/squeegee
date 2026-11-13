@@ -11,6 +11,8 @@ Give each UX law one result, with what you saw:
 - **Not applicable.** The screen holds nothing the UX law governs. Name what is absent: "no multi-step flow".
 - **Not run.** The check needs a tool or an interaction you did not have. Name it.
 
+The four auditor UX laws get a note in place of Pass or Fail, and stay out of the failed count.
+
 The audit of UX laws is complete at 30 rows per screen. Screens that share a layout share one table.
 
 ## When a tell serves a UX law
@@ -19,15 +21,15 @@ Keep the function and replace the mechanism. A striped card that groups related 
 
 ## Scored UX laws
 
-These eight have thresholds. A fail is a finding: a defect when you measured it, a judged tell when you judged it. "Rendered" means read from `measure.js` or the browser tool.
+These eight have thresholds. A fail is a finding: a defect when you measured it, a judged tell when you judged it. One cause counts once: a fail that a tell or a defect already covers adds no second tell, and one element that fails two UX laws is one finding. "Rendered" means read from `measure.js` or the browser tool.
 
 | UX law | In plain words | Fail when | Confirm | Fix |
 |---|---|---|---|---|
-| Fitts's Law | A target takes longer to hit as it gets smaller or farther away. | A control is under 24 by 24 px, or under 32 by 24 px with a neighbor closer than 8 px. On touch screens the floor is 44 by 44 px. Text links inside a sentence are exempt: 62% of reference sites had a quarter of their controls under 24 px, almost all inline links. | Rendered: `under24` and `under44` in `measure.js`. Detector L01 gives candidates. | Enlarge the hit area with padding. The visible glyph may stay small. |
+| Fitts's Law | A target takes longer to hit as it gets smaller or farther away. | A button, a form field or an icon control is under 24 by 24 px, or under 32 by 24 px with a neighbor closer than 8 px. Text links are exempt, in a sentence or in a navigation row: 94% of reference pages hold a control under 24 px, almost all of them text links. On a native app or a site built for phones the floor is 44 by 44 px. On other sites, report controls under 44 px at 390 px and leave them out of the count. | Rendered: `under24` and `under44` in `measure.js`. Detector L01 gives candidates. | Enlarge the hit area with padding. The visible glyph may stay small. |
 | Law of Proximity | Items near each other are read as one group. | The space between an item and its own label or group is equal to or larger than the space between groups. | Rendered, or judged from the code's spacing values. | Space inside a group clearly smaller than space between groups, on the project's spacing scale. |
 | Law of Common Region | Items inside one boundary are read as one group. | A border or background wraps unrelated items, or splits items that belong together. | Rendered or judged. | Move the boundary to match the grouping, or drop it and group with spacing. |
 | Law of Similarity | Items that look alike are read as the same kind of thing. | A link inside text has no underline and no color difference. Two controls with one function have different styles, or two functions share one style. Focus is invisible (detector X02). | Rendered or judged. Tab through the controls for focus. | One style per function, defined once as a variant. |
-| Von Restorff Effect | Among similar items, the one that differs is noticed and remembered. | More than one filled primary button on one surface (a page, a dialog, a card, a pane). Emphasis carried by color alone. So many highlights that none leads. | Judged, per surface. | One filled button per surface. Two main actions the product needs both stay, one filled and one quiet. Add a label or icon where color carries meaning. |
+| Von Restorff Effect | Among similar items, the one that differs is noticed and remembered. | More than one filled primary button in one view: what is on screen at once, a dialog, a card or a pane. One action repeated in the header, the first section and the footer is one button. Emphasis carried by color alone. So many highlights that none leads. | Judged, per surface. | One filled button per surface. Two main actions the product needs both stay, one filled and one quiet. Add a label or icon where color carries meaning. |
 | Hick's Law | Deciding takes longer as choices grow in number and complexity. | More than 7 top-level navigation items of equal weight, or more than 2 calls to action in the first screen. A prompt to judge, since the reference median is 7 navigation links and the 90th percentile is 59 with footers. | Judged. | Group, order and rank what exists: make one option the default and set the rest quieter. Every choice stays. Report it when the screen needs one removed. |
 | Choice Overload | Too many options at once make people slower to choose, or stop them choosing. | More than 4 pricing tiers, or a long flat list of equal options with no default or recommendation. | Judged. | Rank and mark a default. Every option stays. |
 | Occam's Razor | Among designs that work equally well, the one with the fewest parts is best. | An element passes the removal test (rule 7 in SKILL.md): the screen is no worse without it. | Judged, on every wrapper, border, shadow, icon, label and animation. | Delete it and leave the space empty. |

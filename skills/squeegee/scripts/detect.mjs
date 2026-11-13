@@ -37,6 +37,17 @@ const h1Block = (l, lines, i) => {
   }
   return out;
 };
+// The line that opens the CSS rule or keyframe step this line sits in: the nearest line at or above it that holds "{".
+// It is the selector or keyframe step just before the last "{" ahead of position `at`, so a neighbor rule on the same line does not count.
+const ruleHead = (lines, i, at) => {
+  for (let j = i, s = lines[i].slice(0, at); j >= Math.max(0, i - 8); s = lines[--j] || '') {
+    const open = s.lastIndexOf('{');
+    if (open > -1) return s.slice(s.lastIndexOf('}', open) + 1, open + 1);
+  }
+  return '';
+};
+// True when the line matches `re` (a global regex) inside a rule whose head matches `head`.
+const inRule = (l, lines, i, re, head) => [...l.matchAll(re)].some((m) => head.test(ruleHead(lines, i, m.index)));
 
 // tier: defect (always fix) | tell (fix unless kept) | default (cluster only) | report (never generate) | house (fix with approval)
 export const RULES = [
@@ -59,6 +70,16 @@ export const RULES = [
   { id: 'T07', tier: 'tell', name: 'looping attention animation', law: 'Von Restorff',
     test: (l) => /\banimate-(bounce|pulse|ping)\b/.test(l) && !/skeleton|loading|spinner|placeholder/i.test(l),
     fix: 'Remove it unless it marks something that is live right now.' },
+  { id: 'T08', tier: 'tell', name: 'hover grows the element by 5% or more', law: null,
+    test: (l, lines, i) => /\bhover:scale-(10[5-9]|1[1-9]\d|[2-9]\d\d)\b|\bhover:scale-\[1\.(0[5-9]|[1-9])|whileHover=\{\{[^}]*\bscale:\s*1\.(0[5-9]|[1-9])/.test(l)
+      || inRule(l, lines, i, /\bscale\(1\.(0[5-9]|[1-9])\d*\)|\bscale:\s*1\.(0[5-9]|[1-9])\d*\s*(;|$)/g, /:hover/),
+    fix: 'Grow by 2% or less, or mark hover with color, border or shadow.' },
+  { id: 'T09', tier: 'tell', name: 'element enters from scale(0)', law: null,
+    test: (l, lines, i) => /\binitial=\{\{[^}]*\bscale:\s*0(?![.\d])/.test(l) || inRule(l, lines, i, /\bscale\(0\)/g, /(^|[\s{},])(from|0%)\s*\{$/),
+    fix: 'Start at scale(0.95) with opacity 0. Nothing real grows from a point.' },
+  { id: 'T10', tier: 'tell', name: 'ease-in on interface motion', law: null,
+    test: (l) => (/(^|[\s"'`:])ease-in(?![\w-])/.test(l) && /transition|duration-|animate-|hover:/.test(l)) || /(transition|animation)[\w-]*\s*:[^;{}]*\bease-in(?![\w-])/.test(l) || /\bease:\s*["']easeIn["']/.test(l),
+    fix: 'Use an ease-out curve. Ease-in starts slowly, so the interface feels late to respond.' },
   { id: 'X01', tier: 'defect', name: 'transition on all properties', law: null,
     test: (l) => /\btransition-all\b|transition:\s*all\b/.test(l),
     fix: 'Name the properties that change, usually transform and opacity.' },
@@ -81,7 +102,7 @@ export const RULES = [
     test: (l, lines, i) => { const t = tagAt(lines, i); return new RegExp(`<(button|a)\\b(?:=>|[^>])*?${CLS}\\b(h-[3-5]|size-[3-5])\\b`).test(t) && !/\bp[xy]?-[2-9]\b|\bp[xy]?-\d\d\b|\bmin-[hw]-/.test(t); },
     fix: 'Give the control a hit area of at least 24 by 24 px, 44 by 44 px on touch screens.' },
   { id: 'L02', tier: 'tell', name: 'slow interface transition', law: null,
-    test: (l) => /\bduration-(500|700|1000)\b/.test(l) && /hover:|focus:|active:|transition/.test(l),
+    test: (l) => (/\bduration-(500|700|1000)\b/.test(l) && /hover:|focus:|active:|transition/.test(l)) || /\btransition(-duration)?\s*:[^;{}]*?(?<![\w.])(0?\.[5-9]\d*s|[1-9]\d*(\.\d+)?s|[5-9]\d\dms|\d{4,}ms)\b/.test(l),
     fix: 'Keep interface transitions at 300 ms or less.' },
   { id: 'R01', tier: 'report', name: 'placeholder name or text', law: null,
     test: (l) => /\b(Jane Doe|John Doe|Acme (Inc|Corp|Co)\b|Lorem ipsum|Your Company|example@example\.com)/.test(l),
@@ -91,7 +112,7 @@ export const RULES = [
     fix: 'Report it. Ask the owner for the source. Never invent or adjust a number.' },
   { id: 'H01', tier: 'house', name: 'em dash in interface copy', law: null,
     // A dash between words only: a lone "—" is a placeholder for an empty value, which is data.
-    test: (l) => /[\p{L}\p{N}.,!?)]\s?—\s?[\p{L}\p{N}(]/u.test(l) && !/^\s*(\/\/|\*|\/\*|\{\/\*|<!--)/.test(l),
+    test: (l, lines, i, file) => /[\p{L}\p{N}.,!?)]\s?—\s?[\p{L}\p{N}(]/u.test(l) && !/^\s*(\/\/|\*|\/\*|\{\/\*|<!--)/.test(l) && (!file.css || /\bcontent\s*:/.test(l)),
     fix: 'House rule, not an evidence-based tell. Rewrite with a period or comma after approval.' },
   // Stock defaults found by line. They feed the cluster count and are never reported alone.
   { id: 'D05', tier: 'default', name: 'headline weight 700 or more', law: null,
@@ -105,7 +126,7 @@ const rule = (id) => RULES.find((r) => r.id === id);
 // A font-family whose first family is not a system or generic one. A system-only stack stays eligible for D03.
 const FAMILY_CHOSEN = /font-family\s*:\s*(?!["']?(ui-|system-ui|-apple-system|blinkmacsystemfont|segoe ui|sans-serif|serif|monospace|cursive|fantasy|arial|helvetica|inherit|initial|unset|revert|var\(|theme\())["']?[a-z]/i;
 // Faces that need no loading: generic names and the faces operating systems ship in their default stacks.
-const SAFE_FACE = /^(serif|sans-serif|monospace|cursive|fantasy|emoji|math|system-ui|ui-[a-z-]+|-apple-system|blinkmacsystemfont|inherit|initial|unset|revert|arial|helvetica( neue)?|times( new roman)?|georgia|courier( new)?|verdana|tahoma|trebuchet ms|impact|palatino|segoe ui( [a-z]+)*|roboto|sf pro( [a-z]+)*|sf mono|sfmono-regular|menlo|monaco|consolas|lucida [a-z ]+|liberation [a-z]+|dejavu [a-z ]+|ubuntu( mono)?|cantarell|oxygen|fira sans|droid sans|noto [a-z ]+|apple color emoji)$/i;
+const SAFE_FACE = /^(serif|sans-serif|monospace|cursive|fantasy|emoji|math|system-ui|ui-[a-z-]+|-apple-system|blinkmacsystemfont|inherit|initial|unset|revert|arial|helvetica( neue)?|times( new roman)?|georgia|courier( new)?|verdana|tahoma|trebuchet ms|impact|palatino|segoe ui( [a-z]+)*|roboto|sf pro( [a-z]+)*|sf mono|sfmono-regular|menlo|monaco|consolas|lucida [a-z ]+|liberation [a-z]+|dejavu [a-z ]+|ubuntu( mono)?|cantarell|oxygen|fira sans|droid sans|noto [a-z ]+|apple (color emoji|symbols)|avenir( next)?|helveticaneue|arial black|pingfang [a-z]+|songti [a-z]+|hiragino [a-z ]+|microsoft yahei|iowan old style|cascadia (code|mono))$/i;
 // A font-family declaration, or a custom property with "font" in its name whose value is a stack ending in a generic family.
 // The stack test keeps --font-display: swap and --font-weight: bold from being read as faces.
 const FACE_DECL = /(?:font-family\s*:\s*([^;}{\n]+)|--[\w-]*font[\w-]*\s*:\s*([^;}{\n]+,\s*(?:serif|sans-serif|monospace|system-ui|ui-[a-z-]+|cursive|fantasy))\s*(?=[;}\n]|$))/g;
@@ -114,10 +135,58 @@ const norm = (t) => t.trim().replace(/^["']|["']$/g, '').toLowerCase().replace(/
 const loadedFaces = (text) => [
   ...[...text.matchAll(/@font-face\s*\{[^}]*?font-family\s*:\s*([^;}]+)/g)].map((m) => m[1]),
   ...[...text.matchAll(/fonts\.(?:googleapis|bunny)[^"'\s)]*/g)].flatMap((m) => [...m[0].matchAll(/family=([^&:"']+)/g)].flatMap((f) => f[1].replace(/%20/g, ' ').split('|'))),
-  ...[...text.matchAll(/@fontsource(?:-variable)?\/([\w-]+)/g)].map((m) => m[1]),
+  ...[...text.matchAll(/@fontsource(-variable)?\/([\w-]+)/g)].flatMap((m) => (m[1] ? [m[2], `${m[2]} variable`] : [m[2]])),   // the variable package names its family "Inter Variable"
   ...[...text.matchAll(/import\s*\{([^}]*)\}\s*from\s*['"]next\/font\/google['"]/g)].flatMap((m) => m[1].split(',').map((n) => n.trim().split(/\s+as\s+/)[0])),
 ].map(norm);
 const CHECK =/<(Check|CheckCircle2?|CircleCheck|CheckIcon)\b|[✓✔✅]/;
+
+// Source variation: eight densities of style choices made one at a time. Each limit is the 90th percentile of
+// hand-made repos in research/bench.mjs, so "over" means denser than 90% of hand-made code.
+export const VARIATION = [
+  ['V01', 'tracked uppercase labels per 1,000 lines', 0.15, (v, k) => v.caps / k],
+  ['V02', 'share of text sizes at 12 px or smaller', 0.47, (v) => (v.sizes ? v.small / v.sizes : 0)],
+  ['V03', 'hard-coded colors in markup per 1,000 lines', 9.03, (v, k) => v.hex / k],
+  ['V04', 'inline styles per 1,000 lines', 6.93, (v, k) => v.inline / k],
+  ['V05', 'emoji per 1,000 lines', 1.07, (v, k) => v.emoji / k],
+  ['V06', 'gradients per 1,000 lines', 1.69, (v, k) => v.gradient / k],
+  ['V07', 'backdrop blurs per 1,000 lines', 0.25, (v, k) => v.blur / k],
+  ['V08', 'arbitrary Tailwind values per 1,000 lines', 5.3, (v, k) => v.arb.size / k],
+];
+const UI_FILE = /\.(tsx|jsx|vue|svelte|astro|html)$/;
+const hits = (s, re) => (s.match(re) || []).length;
+export const newTally = () => ({ lines: 0, caps: 0, sizes: 0, small: 0, hex: 0, inline: 0, emoji: 0, gradient: 0, blur: 0, arb: new Set() });
+// Adds one file's counts to v. Reads interface files and stylesheets, nothing else.
+export function tally(path, text, v) {
+  const css = /\.s?css$/.test(path);
+  const ui = UI_FILE.test(path) || (/\.js$/.test(path) && /className=|<\/[A-Za-z]/.test(text));   // a .js file counts when it holds markup
+  if ((!ui && !css) || text.length > MAX_BYTES) return;
+  v.lines += hits(text, /\n/g) + 1;
+  v.gradient += hits(text, /\bbg-gradient-to-|\bbg-linear-to-|\b(?:linear|radial|conic)-gradient\(/g);
+  v.blur += hits(text, /\bbackdrop-blur|backdrop-filter:\s*blur/g);
+  if (css) {
+    for (const m of text.matchAll(/\{[^{}]*text-transform:\s*uppercase[^{}]*\}/g)) {
+      const ls = m[0].match(/letter-spacing:\s*([^;}]+)/);
+      if (ls && !/^(0(\.0+)?[a-z%]*|normal)$/.test(ls[1].trim())) v.caps++;
+    }
+    for (const m of text.matchAll(/font-size:\s*([\d.]+)(px|rem)\b/g)) { v.sizes++; if (+m[1] * (m[2] === 'rem' ? 16 : 1) <= 12) v.small++; }
+    return;
+  }
+  v.caps += text.split('\n').filter((l) => /\buppercase\b/.test(l) && /\btracking-/.test(l)).length;
+  for (const m of text.matchAll(/\btext-(xs|sm|base|lg|xl|[2-9]xl|\[([\d.]+)(px|rem|em)\])(?![\w-])/g)) { v.sizes++; if (m[1] === 'xs' || (m[2] && +m[2] * (m[3] === 'px' ? 1 : 16) <= 12)) v.small++; }
+  for (const m of text.matchAll(/\b[a-z][\w-]*-\[[^\]\s]{1,40}\]/g)) v.arb.add(m[0]);
+  v.hex += hits(text, /#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b/g);
+  v.inline += hits(text, /\bstyle=\{\{|\bstyle="/g);
+  v.emoji += hits(text.replace(/[©®™]/g, ''), /\p{Extended_Pictographic}/gu);
+}
+// The eight measures for a finished tally, or null under 3,000 lines: in a small codebase one blur or one label trips a density,
+// and the hand-made baseline holds few repos that small.
+export function variation(v) {
+  if (v.lines < 3000) return null;
+  const k = v.lines / 1000;
+  const measures = VARIATION.map(([id, name, limit, f]) => { const value = +f(v, k).toFixed(2); return { id, name, value, limit, over: value > limit }; });
+  const over = measures.filter((m) => m.over).length;
+  return { lines: v.lines, measures, over, of: measures.length, flagged: over >= 3 };
+}
 
 function walk(dir, out, skipped) {
   for (const name of readdirSync(dir)) {
@@ -157,6 +226,7 @@ export function scan(target) {
   const p = { fontChosen: false, inter: false, lucideFiles: 0, strokeFiles: 0, globalStroke: false, shadcnStock: null, shadcnVars: false,
     motion: false, reducedMotion: false, cssInJs: false, tailwindV4: false, modules: false, loaded: new Set(), unknownLoader: false };
   const faces = new Map();   // first family of each font declaration in the target, with where it was first seen
+  const vt = newTally();
   const st = { files: 0, sizes: new Set(), weights: new Set(), families: new Set(), colors: new Set(), uppercase: 0, gradients: 0 };
   const add = (r, file, line, match) => {
     const c = { id: r.id, tier: r.tier, name: r.name, law: r.law || null, file: rel(file), line, match: match.trim().slice(0, 140), fix: r.fix || null };
@@ -186,8 +256,9 @@ export function scan(target) {
 
     // Line rules read markup and stylesheets inside the target only.
     if (!targetSet.has(path)) continue;
+    tally(path, text, vt);
     if (!markup && !css) continue;
-    const file = { text };
+    const file = { text, css };
     for (const m of text.matchAll(FACE_DECL)) {
       const face = (m[1] || m[2]).split(',')[0].trim().replace(/\s*!important$/, '').replace(/^["']|["']$/g, '');
       if (!/^[A-Za-z][\w .-]*$/.test(face) || SAFE_FACE.test(face)) continue;   // skips var(), theme() and system faces
@@ -251,7 +322,7 @@ export function scan(target) {
   shown.sort((a, b) => order[a.tier] - order[b.tier] || a.file.localeCompare(b.file) || a.line - b.line);
   const counts = shown.reduce((m, c) => (m[c.tier] = (m[c.tier] || 0) + 1, m), {});
   const styles = st.files ? { cssFiles: st.files, fontFamilies: st.families.size, fontSizes: st.sizes.size, fontWeights: st.weights.size, colors: st.colors.size, uppercase: st.uppercase, gradients: st.gradients } : null;
-  return { projectRoot: root.replace(/\\/g, '/'), target: rel(abs) || '.', files: targetFiles.length, projectFiles: projectFiles.length, skipped, stack, defaults, styles,
+  return { projectRoot: root.replace(/\\/g, '/'), target: rel(abs) || '.', files: targetFiles.length, projectFiles: projectFiles.length, skipped, stack, defaults, styles, variation: variation(vt),
     cluster: { present: defaults.length, of: 9, flagged: defaults.length >= 5, opaque: defaults.length >= 7 }, counts, candidates: shown };
 }
 
@@ -270,6 +341,10 @@ function main() {
   console.log(`stock defaults: ${r.cluster.present} of 9${r.cluster.flagged ? ' (flagged: 5 or more)' : ''}`);
   for (const d of r.defaults) console.log(`  ${d.id}  ${d.name}  (${d.where})`);
   if (r.styles) console.log(`plain CSS in ${r.styles.cssFiles} files: ${r.styles.fontFamilies} chosen faces, ${r.styles.fontSizes} font sizes, ${r.styles.fontWeights} weights, ${r.styles.colors} color values, ${r.styles.uppercase} uppercase rules, ${r.styles.gradients} gradients`);
+  if (r.variation) {
+    console.log(`source variation: ${r.variation.over} of 8 over the hand-made limit${r.variation.flagged ? ' (flagged: 3 or more)' : ''}, ${r.variation.lines} lines read`);
+    for (const m of r.variation.measures.filter((x) => x.over)) console.log(`  ${m.id}  ${m.name}: ${m.value} (limit ${m.limit})`);
+  }
   console.log(`candidates: ${Object.entries(r.counts).map(([k, v]) => `${v} ${k}`).join(', ') || 'none'}`);
   for (const c of r.candidates) console.log(`  ${c.id}  ${c.tier.padEnd(6)} ${c.file}:${c.line}  ${c.name}${c.count ? ` (${c.count} places)` : ''}${c.law ? `  [UX law: ${c.law}]` : ''}`);
 }

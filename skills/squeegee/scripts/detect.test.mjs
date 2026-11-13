@@ -6,7 +6,8 @@ import { dirname, join } from 'node:path';
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync, symlinkSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
-import { scan } from './detect.mjs';
+import { scan, tally, newTally } from './detect.mjs';
+import { deal, check, AXES } from './direction.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const ids = (r) => new Set(r.candidates.map((c) => c.id));
@@ -162,6 +163,8 @@ test('smaller misses: zoom 1.0, multi-line body size, gap-x, trademark, Expo', (
 test('em dash: a lone dash placeholder is data, a dash between words is copy', () => {
   assert.ok(!idsFor('<td>{ping ?? "—"}</td>\n<span>—</span>').has('H01'));
   assert.ok(idsFor('<p>Round over—next round soon</p>').has('H01'));
+  assert.ok(!idsFor('<main />', { 'app.css': '.a { color: red; } /* brand red—do not change */\n.b::after { content: "more—soon"; }'.split('\n')[0] }).has('H01'));
+  assert.ok(idsFor('<main />', { 'app.css': '.b::after { content: "more—soon"; }' }).has('H01'));
 });
 
 test('a face named in CSS but never loaded is flagged, a loaded or system face is not', () => {
@@ -179,9 +182,69 @@ test('plain CSS: an h1 rule feeds the weight and centering defaults, and the sty
   assert.ok(!defaultIds(scanFor('<main />', { 'app.css': 'h1 { font-weight: 500; }\nh2 { font-weight: 800; text-align: center; }' })).has('D05'));
 });
 
-test('measure.js is one expression a browser tool can evaluate', () => {
-  const src = readFileSync(join(here, 'measure.js'), 'utf8');
-  assert.equal(typeof new Function(`return () => (${src.replace(/^\/\/.*$/gm, '')})`)(), 'function');
+test('measure.js and stress.js are each one expression a browser tool can evaluate', () => {
+  for (const name of ['measure.js', 'stress.js']) {
+    const src = readFileSync(join(here, name), 'utf8');
+    assert.equal(typeof new Function(`return () => (${src.replace(/^\/\/.*$/gm, '')})`)(), 'function', name);
+  }
+});
+
+test('source variation: dense one-off styling is flagged, plain code is not, a small project is not measured', () => {
+  const noisy = scanFor(Array(3200).fill('<p className="text-xs uppercase tracking-widest" style={{ color: "#ff00aa" }}>🚀 New</p>').join('\n'));
+  assert.ok(noisy.variation.flagged, JSON.stringify(noisy.variation));
+  const over = new Set(noisy.variation.measures.filter((m) => m.over).map((m) => m.id));
+  for (const id of ['V01', 'V02', 'V03', 'V04', 'V05']) assert.ok(over.has(id), `missing ${id}`);
+  assert.equal(scanFor(Array(3200).fill('<p className="text-base">Plain text</p>').join('\n')).variation.over, 0);
+  assert.equal(scanFor(Array(1200).fill('<p className="text-xs">Small project</p>').join('\n')).variation, null);
+  const css = scanFor('<main />', { 'app.css': Array(1100).fill('.k { text-transform: uppercase; letter-spacing: 0.1em; font-size: 11px; }\n.b { backdrop-filter: blur(8px); }\n.t { font-size: 16px; }').join('\n') });
+  assert.deepEqual(css.variation.measures.filter((m) => m.over).map((m) => m.id), ['V01', 'V02', 'V07']);
+});
+
+test('source variation counts: tracking values, text size units, markup in .js files', () => {
+  const t = (path, text) => { const v = newTally(); tally(path, text, v); return v; };
+  assert.equal(t('a.css', '.k { text-transform: uppercase; letter-spacing: normal; }').caps, 0);
+  assert.equal(t('a.css', '.k { text-transform: uppercase; letter-spacing: 0; }').caps, 0);
+  assert.equal(t('a.css', '.k { text-transform: uppercase; letter-spacing:0.1em; }').caps, 1);
+  assert.deepEqual([t('a.tsx', '<p className="text-[12.5px]" />').small, t('a.tsx', '<p className="text-[0.75rem]" />').small, t('a.tsx', '<p className="text-[12px]" />').small], [0, 1, 1]);
+  assert.equal(t('a.js', 'export const A = () => <p className="text-xs" style={{ color: "#f0a" }}>hi</p>;').inline, 1);
+  assert.equal(t('a.js', 'export const sum = (a, b) => a + b;').lines, 0);
+});
+
+test('motion rules read the rule the declaration sits in, not a neighbor on the same line', () => {
+  const css = (text) => idsFor('<main />', { 'app.css': text });
+  assert.ok(!css('.a:hover { color: red } .b { transform: scale(1.08) }').has('T08'));
+  assert.ok(css('.a { color: red } .b:hover { transform: scale(1.08) }').has('T08'));
+  assert.ok(!css('@keyframes out { from { transform: scale(1); } to { transform: scale(0); } }').has('T09'));
+  assert.ok(css('@keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }').has('T09'));
+  assert.ok(css('.a { transform: scale(1.08) } .b:hover { transform: scale(1.08) }').has('T08'));
+  assert.ok(css('@keyframes blink { 50% { transform: scale(0); } } @keyframes pop { from { transform: scale(0); } }').has('T09'));
+});
+
+test('direction.mjs: one seed deals one hand, hands differ, and the contract check reads each ingredient', () => {
+  const hands = deal('karkats-arcade', 2);
+  assert.deepEqual(hands, deal('karkats-arcade', 2));
+  assert.notDeepEqual(hands, deal('another-project', 2));
+  assert.ok(Object.keys(AXES).filter((k) => hands[0][k] !== hands[1][k]).length >= 4);
+  const got = { ground: '#0b0c0f', dark: true, ink: '#f2f3f5', accent: '#5e6ad2', bodyFace: 'Inter', headingFace: 'Inter', headline: { size: 57, weight: 500 }, body: { size: 16 }, radius: 8 };
+  const rows = check({ ground: '#0a0b0e', dark: true, accent: '#5e6ad2', bodyFace: '"Inter", sans-serif', headline: { size: 56, weight: 500 }, body: { size: 16 }, radius: 12 }, got);
+  assert.deepEqual(rows.filter((r) => !r.pass).map((r) => r.key), ['radius']);
+  assert.equal(rows.length, 8);   // ink and headingFace are not in the contract, so they are not checked
+  assert.deepEqual(check({ ground: '#ffffff', headline: { size: 56 } }, { ground: '#0b0c0f', headline: null }).map((r) => r.pass), [false, false]);
+});
+
+test('motion tells: hover growth, an entrance from scale(0), ease-in, a slow CSS transition', () => {
+  const css = (text) => idsFor('<main />', { 'app.css': text });
+  assert.ok(idsFor('<div className="transition hover:scale-105" />').has('T08'));
+  assert.ok(!idsFor('<div className="transition hover:scale-[1.02]" />').has('T08'));
+  assert.ok(css('.card:hover {\n  transform: scale(1.08);\n}').has('T08'));
+  assert.ok(!css('.card.is-open {\n  transform: scale(1.08);\n}').has('T08'));
+  assert.ok(idsFor('<motion.div initial={{ opacity: 0, scale: 0 }} />').has('T09'));
+  assert.ok(!idsFor('<motion.div initial={{ opacity: 0, scale: 0.95 }} />').has('T09'));
+  assert.ok(css('@keyframes pop {\n  from { transform: scale(0); }\n  to { transform: scale(1); }\n}').has('T09'));
+  assert.ok(css('.menu { transition: opacity 200ms ease-in; }').has('T10'));
+  assert.ok(!css('.menu { transition: opacity 200ms ease-in-out; }').has('T10'));
+  assert.ok(css('.menu { transition: opacity 0.6s ease; }').has('L02'));
+  assert.ok(!css('.menu { transition: opacity 0.25s ease, transform 150ms; }').has('L02'));
 });
 
 test('plain CSS h1: reads the h1 rule itself, not a neighbor on the line or a descendant', () => {
@@ -201,4 +264,5 @@ test('font loading: a longer family name does not count, and non-family font var
   assert.ok(!idsFor('<main />', { 'app.css': ':root { --font-display: swap; --font-weight: bold; --font-feature: "ss01"; }\nbody { font-family: system-ui, sans-serif; }' }).has('X05'));
   assert.ok(idsFor('<main />', { 'app.css': ':root { --font-sans: "Rajdhani", sans-serif; }\nbody { font-family: var(--font-sans); }' }).has('X05'));
   assert.ok(!idsFor('<main />', { 'layout.tsx': 'import { Space_Grotesk } from "next/font/google";', 'app.css': 'body { font-family: "Space Grotesk", sans-serif; }' }).has('X05'));
+  assert.ok(!idsFor('<main />', { 'main.ts': 'import "@fontsource-variable/inter";', 'app.css': ':root { --font-sans: "Inter Variable", sans-serif; }' }).has('X05'));
 });

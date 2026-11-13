@@ -3,7 +3,10 @@
 // reads computed styles, writes one JSON line per page and viewport, saves a screenshot.
 // Zero dependencies: needs Node 22+ (built-in WebSocket and fetch) and an installed Chrome.
 //
-//   node research/capture.mjs <sites.csv> <outDir> [--limit N] [--only 1,2,3] [--jobs 4] [--no-shots]
+//   node research/capture.mjs <sites.csv> <outDir> [--limit N] [--only 1,2,3] [--jobs 4] [--no-shots] [--scripts a.js,b.js]
+//
+// --scripts evaluates extra page scripts after the measurements, in order, and stores each result under the
+// script's file name (measure.js becomes row.measure). Use it to run the skill's own measure.js and stress.js.
 //
 // CSV header: n,surface,category,name,url,source_type
 
@@ -213,13 +216,14 @@ function extract() {
 
 function parseArgs(argv) {
   const [csv, outDir, ...rest] = argv;
-  if (!csv || !outDir) { console.error('usage: capture.mjs <sites.csv> <outDir> [--limit N] [--only 1,2] [--jobs 4] [--no-shots]'); process.exit(2); }
-  const opt = { csv, outDir: resolve(outDir), limit: Infinity, only: null, jobs: 4, shots: true };
+  if (!csv || !outDir) { console.error('usage: capture.mjs <sites.csv> <outDir> [--limit N] [--only 1,2] [--jobs 4] [--no-shots] [--scripts a.js,b.js]'); process.exit(2); }
+  const opt = { csv, outDir: resolve(outDir), limit: Infinity, only: null, jobs: 4, shots: true, scripts: [] };
   for (let i = 0; i < rest.length; i++) {
     if (rest[i] === '--limit') opt.limit = +rest[++i];
     else if (rest[i] === '--only') opt.only = new Set(rest[++i].split(','));
     else if (rest[i] === '--jobs') opt.jobs = +rest[++i];
     else if (rest[i] === '--no-shots') opt.shots = false;
+    else if (rest[i] === '--scripts') opt.scripts = rest[++i].split(',').map((p) => ({ key: p.split(/[\\/]/).pop().replace(/\.\w+$/, ''), src: readFileSync(p, 'utf8') }));
   }
   return opt;
 }
@@ -299,6 +303,9 @@ async function capture(site, vp, opt) {
     });
     if (res.exceptionDetails) throw new Error(res.exceptionDetails.exception?.description?.slice(0, 200) || 'extract failed');
     Object.assign(row, res.result.value);
+    for (const sc of opt.scripts) {   // a script that fails leaves its key null and the row stays usable
+      try { const r2 = await tab.send('Runtime.evaluate', { expression: sc.src, returnByValue: true }); row[sc.key] = r2.exceptionDetails ? null : r2.result.value; } catch { row[sc.key] = null; }
+    }
     if (opt.shots) {
       const shot = await tab.send('Page.captureScreenshot', { format: 'jpeg', quality: 60 });
       writeFileSync(join(opt.outDir, 'shots', `${site.n}-${vp.key}.jpg`), Buffer.from(shot.data, 'base64'));

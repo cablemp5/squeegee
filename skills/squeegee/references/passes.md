@@ -74,7 +74,9 @@ Do this first so every later fix can reference a token.
 4. **Radius.** One base value and derived steps. An inner radius equals the outer radius minus the padding between them.
 5. **Shadow and border.** One hairline. At most two shadow levels, used for things that float.
 
-When sprawl measures are over their limit, group 1 is where they come down. List every distinct text size, weight and text color the target uses. Map each to the nearest step of a scale: nine sizes or fewer, three weights or fewer, ink and muted ink plus one color per state or role. Define the steps as tokens, then replace each literal value with its token. Raise text under 12 px to 12 px or more. Every element keeps its role: a caption stays the smallest step and a headline stays the largest. Run `measure.js` after the group and confirm that each count fell.
+When sprawl measures are over their limit, group 1 is where they come down. List every distinct text size, weight and text color the target uses. Map each to the nearest step of a scale, so no two steps sit 1 px apart: nine sizes or fewer, three weights or fewer, ink and muted ink plus one color per state or role. Define the steps as tokens, then replace each literal value with its token. Raise text under 12 px to 12 px or more. Every element keeps its role: a caption stays the smallest step and a headline stays the largest. Run `measure.js` after the group and confirm that each count fell.
+
+The source variation measures in `detect.json` say where the one-off values live. For each measure that is over, move its values into the theme in this group: hard-coded colors and arbitrary values become tokens, repeated inline styles become a class or a variant, and the label style becomes one token or component. Rerun the detector and confirm that each measure fell.
 6. **Icons.** Set stroke width and size once, matched to the body text weight.
 7. **Motion tokens.** See group 3. Define them now.
 8. **Dark mode.** Every token gets a dark value. A screen that had dark mode before must still have it, at 4.5:1 or better.
